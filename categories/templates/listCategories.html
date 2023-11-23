@@ -1,0 +1,26 @@
+{% load static %}
+<div class="row">
+    {% for object in object_list %}
+         <ul class="list-group">
+               <hr>
+               <li class="list-group-item">
+                 <div class="d-flex justify-content-between align-items-start" style="width: 925px;">
+                      <div class="mr-3">
+                           {% if object.image %}
+                               <img class="card-img-left" src="{{ object.image.url}}" alt="Card image cap" style=" height: 150px; object-fit: cover;">
+                           {% else %}
+                               <img class="card-img-left" src="{% static 'images/aimagenot.png' %}" alt="Card image cap" style=" height: 150px; object-fit: cover;">
+                           {% endif %} 
+                      </div>
+                      <div class="mr-3">
+                            <h4 class="card-title">{{object.title}}</h4>
+                            <p class="card-text"> {{object.description }}</p>
+                      </div>
+                      <div>
+                         <a href="{% url 'categories:category' object.slug %}" class="btn btn-outline-success btn-sm">Explore this category</a> 
+                      </div>
+                 </div>
+              </li>
+         </ul>
+    {% endfor %}
+ </div>
