@@ -1,0 +1,82 @@
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start" style="width: 925px;">
+    <div class="mr-3">
+         {% if product.image %}
+             <img class="card-img-left" src="{{ product.image.url}}" alt="Card image cap" style=" height: 150px; object-fit: cover;">
+         {% else %}
+             <img class="card-img-left" src="{% static 'images/aimagenot.png' %}" alt="Card image cap" style=" height: 150px; object-fit: cover;">
+         {% endif %} 
+    </div>
+    <div class="mr-3">
+          <h2 class="card-title"><u>{{product.title}}</u></h2>
+          <a style="color:green">Precio: {{product.price}}€</a>
+          <div>
+            {% if product.stock %}
+                <a>Availability: </a><a style="color:green">IN STOCK </a><a> {{product.stock}} units remaining</a>
+            {% else %}
+                <a>Availability: </a><a style="color:red">OUT OF STOCK</a>
+            {% endif %}
+            </div>
+          <p class="card-text"> {{product.description }}</p>
+    </div>
+    <div class="d-flex flex-column">
+        {% if product.stock %}
+        <div>
+            <input type="number" value="1" max="{{ product.stock }}" min="1" class="prueba form-control col-sm-1 d-inline" id="quantity" name="quantity" style="min-width:50%;">
+        </div>
+        <div>
+            <form id="form" action="#" method="get">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Add to cart</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+document.getElementById('form').addEventListener('submit', function(e) {
+   e.preventDefault();
+   const quantity = parseInt(document.getElementById('quantity').value);
+   const stock = parseInt("{{ product.stock }}");
+   if (quantity<1)  {
+    alert('The quantity cannot be less than 1');
+    return;
+   } else if (quantity>stock) {
+    alert('The quantity cannot be bigger than the stock');
+    return;
+   }
+   const product = "{{ product.id }}";
+   const url = `{% url 'carts:add' %}?quantity=${quantity}&product_id=${product}`;
+   // Create a new XMLHttpRequest object
+   var xhr = new XMLHttpRequest();
+
+   // Configure it: POST-request for the URL /carts/add/
+   xhr.open('post', url, true);
+
+   // Send the proper header information along with the request
+   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+   xhr.setRequestHeader('X-CSRFToken', csrftoken);
+
+   // What to do when the request is successful
+   xhr.onload = function() {
+       if (xhr.status === 200) {
+           alert("Se ha añadido al carrito correctamente");
+       } else {
+           // The request failed
+           alert('An error occurred during the transaction');
+       }
+   };
+
+   // What to do when the request fails
+   xhr.onerror = function() {
+       console.error('An error occurred during the transaction');
+   };
+
+   // Finally, send the request
+   xhr.send();
+});
+
+</script>
+{% endblock %}

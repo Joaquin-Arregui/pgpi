@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col">
+        <br>
+        {% include 'searchBar.html' with query=query %}
+        <hr>
+        <p>Search results: {{query}} ({{count}})</p>
+        {% include 'list.html' %}
+    </div>
+{% endblock %}
