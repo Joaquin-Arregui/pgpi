@@ -1,0 +1,47 @@
+<style>
+  .navbar-custom {
+    background-color: #2838C2;
+  }
+  span {
+    color: black;
+  }
+  span {
+    font-size: 20px;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <a class="navbar-brand" href="{% url 'index'  %}" style="color:white">🏪 Collecta</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav mr-auto">
+      <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/categories" style="color:white">
+        <span class="fas fa-bars"></span>
+        Categories
+      </a>
+    </div>
+    <div class="navbar-nav ml-auto">
+      {% if user.is_authenticated %}
+        <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/cart" style="color:white">
+          <span class="fas fa-cart-plus"></span>
+          Cart
+        </a>
+        <a class="nav-item nav-link {% if request.path == logout %}active{% endif %}" href="/profile" style="color:white">
+            <span class="fas fa-user"></span>
+            Profile
+        </a>
+      {% else %}
+        <a class="nav-item nav-link {% if request.path == login %}active{% endif %}" href="/user/login" style="color:white">
+          <span class="fas fa-user"></span>
+          Login
+        </a>
+        <a class="nav-item nav-link {% if request.path == register %}active{% endif %}" href="/user/register" style="color:white">
+            <span class="fas fa-user-plus"></span>
+            Registro
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

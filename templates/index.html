@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block content %}
+  <div class="col-10">
+    <br>
+    <h3 style="text-align:center">Listado de Productos</h3>
+    <ul class="list-group">
+      <br>
+      {% include 'searchBar.html' %}
+      <hr>
+      {% include 'list.html' %}
+    </ul>
+  </div>
+{% endblock %}
+{% load static %}
