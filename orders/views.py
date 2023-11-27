@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from carts.utils import get_or_create_cart
 from .models import Order
 from django.contrib.auth.decorators import login_required
@@ -23,3 +23,53 @@ def order(request):
         'order': order,
         'breadcrumb': breadcrumb()
     })
+
+def envio(request, slug):
+    order = get_object_or_404(Order, order_id=slug)
+    context = {'order': order}
+    return render(request, 'orders/id_envio.html', context)
+
+def seguimiento(request):
+   return render(request, 'orders/seguimiento.html')
+
+def estado(request):
+    order_id = request.GET.get('slug')
+    order = get_object_or_404(Order, order_id=order_id)
+    context = {'order': order}
+    return render(request, 'orders/estadopedido.html', context)
+
+def pago(request,slug):
+    order = get_object_or_404(Order, order_id=slug)
+    context = {'order': order}
+    if request.method == 'POST':
+        # get data from the form
+        nombre = request.POST.get('firstName')
+        apellidos = request.POST.get('lastName')
+        calle = request.POST.get('street')
+        numero = request.POST.get('number')
+        codigopostal = request.POST.get('postalCode')
+        ciudad = request.POST.get('city')
+        tarjeta = request.POST.get('cardNumber')
+        cvv = request.POST.get('cvv') 
+        fechacad = request.POST.get('expiryDate')      
+        # add other fields as necessary
+
+        # update the product
+        order.nombre=nombre
+        order.apellidos=apellidos
+        order.calle = calle
+        order.numero = numero
+        order.codigopostal=codigopostal
+        order.ciudad=ciudad
+        order.tarjeta=tarjeta
+        order.cvv=cvv
+        order.fechacad=fechacad
+        # update other fields as necessary
+
+        # save the product
+        order.save()
+
+        # redirect to the same page after saving
+        return redirect('/order/envio/' + order.order_id)
+    return render(request, 'orders/pasarelapago.html', context)
+
