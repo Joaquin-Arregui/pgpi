@@ -13,9 +13,9 @@
           <a style="color:green">Precio: {{product.price}}€</a>
           <div>
             {% if product.stock %}
-                <a>Availability: </a><a style="color:green">IN STOCK </a><a> {{product.stock}} units remaining</a>
+                <a>Disponibilidad: </a><a style="color:green">EN STOCK </a><a> {{product.stock}} unidades restantes</a>
             {% else %}
-                <a>Availability: </a><a style="color:red">OUT OF STOCK</a>
+                <a>Disponibilidad: </a><a style="color:red">FUERA DE STOCK</a>
             {% endif %}
             </div>
           <p class="card-text"> {{product.description }}</p>
@@ -28,7 +28,7 @@
         <div>
             <form id="form" action="#" method="get">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Add to cart</button>
+                <button type="submit" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Añadir al carrito</button>
             </form>
         </div>
         {% endif %}

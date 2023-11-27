@@ -16,20 +16,20 @@
                             <h4 class="card-title">{{object.title}}</h4>
                             <p class="card-text"> {{object.description }}</p>
                             <div>
-                                <a href="{% url 'products:product' object.slug %}" class="btn btn-outline-success btn-sm">Open details</a> 
+                                <a href="{% url 'products:product' object.slug %}" class="btn btn-outline-success btn-sm">Detalles</a> 
                             </div>
                       </div>
                       <div class="d-flex flex-column">
                            <div>
                               {% if object.stock %}
-                               <a href="{% url 'products:product' object.slug %}?quantity=1" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Add to cart</a> 
+                               <a href="{% url 'products:product' object.slug %}?quantity=1" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Añadir al carrito</a> 
                                {% endif %}
                               </div>
                            <div>
                               {% if object.stock %}
                                    <br><br><a style="color:green">Precio: {{object.price}}€</a>
                               {% else %}
-                                   <br><h6 style="color:red">OUT OF STOCK</h6><strike style="color:red">Precio: {{object.price}}€</strike>
+                                   <br><h6 style="color:red">FUERA DE STOCK</h6><strike style="color:red">Precio: {{object.price}}€</strike>
                               {% endif %}
 
                           </div>
