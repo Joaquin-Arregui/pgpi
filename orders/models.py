@@ -6,8 +6,6 @@ from carts.models import Cart
 from django.db.models.signals import pre_save
 
 
-
-# Create your models here.
 class Order(models.Model):
     order_id = models.CharField(max_length=100, null=False, blank=False, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -53,7 +51,6 @@ class Order(models.Model):
         return res
         
 
-#se hace con un signal pre_save porque es algo que hay que calcular antes de almacenar
 def set_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:
         instance.order_id = str(uuid.uuid4())
