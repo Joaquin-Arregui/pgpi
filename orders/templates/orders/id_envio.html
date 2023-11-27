@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+
+{% block breadcrumb %}
+ {% include 'orders/snippets/breadcrumb.html'%}
+{% endblock %}
+
+{% block  content %}
+<style>
+  .content-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .order-code {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    font-size: 1.2em;
+    color: #495057;
+    text-align: center;
+  }
+  .copy-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+</style>
+
+<div class="content-center">
+  <h2>Guarda este código de forma segura, podrás ver la situación de tu pedido:</h2>
+  <div class="order-code">
+    <h5>{{order}}</h5>
+  </div>
+  <button class="copy-button" onclick="navigator.clipboard.writeText('{{order}}')">Copiar código</button>
+</div>
+<div class="col-10 d-flex justify-content-center my-4">
+    <p><a href="#">Políticas de la empresa</a></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <p><a href="#">Términos y condiciones</a></p>
+</div>
+{% endblock  %}

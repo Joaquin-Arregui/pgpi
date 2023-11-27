@@ -5,23 +5,26 @@ from users.models import User
 from carts.models import Cart
 from django.db.models.signals import pre_save
 
-class OrderStatus(Enum):
-    CREATED = 'CREATED'
-    PAYED = 'PAYED'
-    COMPLETED = 'COMPLETED'
-    CANCELED = 'CANCELED'
 
-choices = [(tag, tag.value) for tag in OrderStatus]
-
-# Create your models here.
 class Order(models.Model):
     order_id = models.CharField(max_length=100, null=False, blank=False, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=choices, default=OrderStatus.CREATED) #Enum
     shipping_total = models.DecimalField(default=5, max_digits=8, decimal_places=2)
     total = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    enviado= models.DateField(null=True, blank=True)
+    entregado=models.DateField(null=True,blank=True)
+    nombre = models.CharField(max_length=40, null=True, blank=False, unique=False)
+    apellidos = models.CharField(max_length=40, null=True, blank=False, unique=False)
+    calle = models.CharField(max_length=40, null=True, blank=False, unique=False)
+    numero = models.IntegerField(null=True, blank=False, unique=False)
+    codigopostal = models.IntegerField(null=True, blank=False, unique=False)
+    ciudad = models.CharField(max_length=40, null=True, blank=False, unique=False)
+    tarjeta = models.CharField(max_length=16, null=True, blank=True)
+    cvv = models.CharField(max_length=3, null=True, blank=True)
+    fechacad = models.CharField(max_length=5, null=True, blank=True)
+
 
 
     def __str__(self):
@@ -34,8 +37,20 @@ class Order(models.Model):
         self.total = self.get_total()
         self.save()
 
+    def estado(self):
+        if self.tarjeta==None:
+            res= "No se ha realizado el pago"
+        else:
+            res= "En proceso"
 
-#se hace con un signal pre_save porque es algo que hay que calcular antes de almacenar
+            if self.enviado != None:
+                if self.entregado !=None:
+                    res= "Entregado"
+                else:
+                    res= "Enviado"
+        return res
+        
+
 def set_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:
         instance.order_id = str(uuid.uuid4())
