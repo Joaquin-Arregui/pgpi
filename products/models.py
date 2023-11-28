@@ -19,6 +19,9 @@ class Product(models.Model):
 #        self.slug = slugify(self.title)
 #        super(Product, self).save(*args, **kwargs) 
 
+#    def delete(self, *args, **kwargs):
+#        self.slug = slugify(self.title)
+#        super(Product, self).delete(*args, **kwargs) 
 
     
 def set_slug(sender, instance, *args, **kwargs):

@@ -25,7 +25,14 @@
                                <a href="{% url 'products:product' object.slug %}?quantity=1" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Add to cart</a> 
                                {% endif %}
                               </div>
-                           <div>
+                            <div>
+                                    <user class="is_staff">
+                                        <a href="{% url 'products:product' object.slug %}/edit" class="btn btn-outline-warning btn-sm ">Edit</a> 
+                                        <a href="{% url 'products:product' object.slug %}/delete" class="btn btn-outline-warning btn-sm ">Delete</a> 
+                                   </user> 
+                                    
+                                   </div>
+                              <div>
                               {% if object.stock %}
                                    <br><br><a style="color:green">Precio: {{object.price}}€</a>
                               {% else %}

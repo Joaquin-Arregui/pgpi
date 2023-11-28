@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic.list import ListView
 from .models import Product
 from django.views.generic.detail import DetailView
@@ -28,6 +28,63 @@ class ProductDetailView(DetailView):  #id va a ser de la pk
         context = super().get_context_data(**kwargs)
         #print(context)
         return context
+
+def ProductDeleteView(request, slug):
+    producto = Product.objects.filter(slug=slug).first()
+
+    Product.delete(producto)
+
+    return redirect('/')
+
+def ProductCreateView(request):
+    if request.method == 'POST':
+        # get data from the form
+        titulo = request.POST.get('titulo')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        stock = request.POST.get('stock')
+        imagen = request.FILES.get('imagen')  # get the image as an uploaded file
+
+        # create a new product
+        product = Product(title=titulo, description=descripcion, price=precio, stock=stock, image=imagen)
+
+        # save the product
+        product.save()
+
+        # redirect to the product page after saving
+        return redirect('/product/' + product.slug)
+
+    return render(request, 'productCreate.html')
+
+def ProductEditView(request, slug):
+    product = Product.objects.filter(slug=slug).first()
+
+    if request.method == 'POST':
+        # get data from the form
+        titulo = request.POST.get('titulo')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        stock = request.POST.get('stock')
+        imagen = request.FILES.get('imagen')
+        # add other fields as necessary
+
+        # update the product
+        product.title = titulo
+        product.description = descripcion
+        product.price = precio
+        product.stock = stock
+        product.image = imagen
+        # update other fields as necessary
+
+        # save the product
+        product.save()
+
+        # redirect to the same page after saving
+        return redirect('/product/' + slug)
+
+    return render(request, 'productEdit.html', {
+        'product': product
+    })
 
 class ProductSearchListView(ListView):
     template_name = 'searchResults.html'
