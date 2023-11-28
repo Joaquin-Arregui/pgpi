@@ -1,0 +1,19 @@
+{% extends 'base.html'%}
+
+{% block breadcrumb %}
+ {% include 'orders/snippets/breadcrumb.html'%}
+{% endblock %}
+
+{% block  content %}
+<div style="width: 50%; margin: auto;">
+    <h1 style="text-align: center;">Su pedido se encuentra:</h1>
+    <h2 style="text-align: center; margin-top: 20px; color: 
+        {% if order.estado == 'En proceso' %}#0000FF
+        {% elif order.estado == 'Entregado' %}#008000
+        {% elif order.estado == 'Enviado' %}#90EE90
+        {% elif order.estado == 'No se ha realizado el pago' %}#FF0000
+        {% endif %};">
+        {{order.estado}}
+</div>
+{% endblock  %}
+
