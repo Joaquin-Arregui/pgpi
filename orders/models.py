@@ -6,6 +6,8 @@ from carts.models import Cart
 from django.db.models.signals import pre_save
 
 
+
+
 class Order(models.Model):
     order_id = models.CharField(max_length=100, null=False, blank=False, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
