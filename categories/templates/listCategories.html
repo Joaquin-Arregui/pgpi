@@ -19,6 +19,12 @@
                       <div>
                          <a href="{% url 'categories:category' object.slug %}" class="btn btn-outline-success btn-sm">Ver productos de esta categoria</a> 
                       </div>
+                      {% if user.is_authenticated %}
+                         <user class="is_staff">
+                              <a href="{% url 'categories:category' object.slug %}/edit" class="btn btn-outline-warning btn-sm ">Editar</a> 
+                              <a href="{% url 'categories:category' object.slug %}/delete" class="btn btn-outline-warning btn-sm ">Eliminar</a> 
+                         </user> 
+                       {% endif %}
                  </div>
               </li>
          </ul>

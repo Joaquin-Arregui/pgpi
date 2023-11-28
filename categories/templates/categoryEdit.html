@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="col">
+    <h2>Editar categoria: {{product.title}}</h2>
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            
+            <h3>Titulo</h3>
+            <div class="form-group">
+                <input id="titulo" type="text" name="titulo" class="form-control" placeholder="Titulo">
+                
+            <h3>Descripcion</h3>
+            </div>
+            <div class="form-group">
+                <input id="descripcion" type="text" name="descripcion" class="form-control" placeholder="Descripcion">
+                
+            </div>
+            
+            <h3>Imagen</h3>
+            <div>
+            <div class="form-group">
+                <input id="imagen" type="file" name="imagen" class="form-control" placeholder="Imagen">
+                
+            </div>
+
+            <button type="submit" class="btn btn-primary">Registar</button>
+         
+        </form>
+</div>
+
+<script>
+
+    window.onload = function(){
+
+        var titulo = "{{ product.title }}"; 
+        document.getElementById('titulo').value = titulo;
+
+        var descripcion = "{{ product.description }}";
+        document.getElementById('descripcion').value = descripcion;
+
+        var imagen = "{{ product.image }}";
+        document.getElementById('imagen').value = imagen;
+    };
+</script>
+{% endblock %}
