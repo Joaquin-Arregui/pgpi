@@ -23,6 +23,6 @@ class Customer(User):
 
 
 
-class Profile(models.Model):
+class Perfil(models.Model):
     usuario = models.OneToOneField(User, on_delete = models.CASCADE)
     bio = models.TextField()

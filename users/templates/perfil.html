@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="col">
+        <h1>Perfil de {{ user.username }}</h1>
+        <div class="mr-3">
+            <p class="card-text">Nombre: {{ user.first_name }}</p>
+            <p class="card-text">Apellidos: {{ user.last_name }}</p>
+            <p class="card-text">Email: {{ user.email }}</p>
+        </div>
+    </div>
+{% endblock %}
