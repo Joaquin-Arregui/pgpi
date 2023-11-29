@@ -3,6 +3,7 @@ from carts.utils import get_or_create_cart
 from .models import Order
 from django.contrib.auth.decorators import login_required
 from .utils import breadcrumb
+from django.utils import timezone
 # Create your views here.
 
 @login_required(login_url='login')
@@ -68,4 +69,46 @@ def pago(request,slug):
 
         return redirect('/order/envio/' + order.order_id)
     return render(request, 'orders/pasarelapago.html', context)
+
+def SeguimientoDeleteView(request):
+    order_id = request.GET.get('slug')
+    order = Order.objects.filter(order_id=order_id).first()
+
+    Order.delete(order)
+
+    return redirect('/')
+
+def SeguimientoEditView(request):
+    order_id = request.GET.get('slug')
+    order = Order.objects.filter(order_id=order_id).first()
+    context = {'order': order}
+    
+    if request.method == 'POST' and not order.enviado:
+        
+        order.enviado  = timezone.now()
+        
+        # update other fields as necessary
+
+        # save the product
+        order.save()
+
+        # redirect to the same page after saving
+        return redirect('/order/edit?slug=' + order_id)
+    
+    if request.method == 'POST' and order.enviado:
+        
+        order.entregado = timezone.now()
+        
+        # update other fields as necessary
+
+        # save the product
+        order.save()
+
+        # redirect to the same page after saving
+        return redirect('/order/edit?slug=' + order_id)
+    
+    return render(request, 'orders/orderEdit.html', {
+        'order': order
+    })
+
 

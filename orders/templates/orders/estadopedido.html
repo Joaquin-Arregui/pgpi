@@ -15,5 +15,11 @@
         {% endif %};">
         {{order.estado}}
 </div>
+{% if user.is_staff %}
+    <div class="col-10 d-flex justify-content-center my-4">
+      <a href="{% url 'orders:edit' %}?slug={{order.order_id}}" class="btn btn-outline-warning btn-sm ">Editar pedido</a> 
+      <a href="{% url 'orders:delete' %}?slug={{order.order_id}}" class="btn btn-outline-warning btn-sm ">Eliminar pedido</a> 
+    </div>
+  {% endif %}
 {% endblock  %}
 

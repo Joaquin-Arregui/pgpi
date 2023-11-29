@@ -1,0 +1,34 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="col">
+    <h2 >Editar seguimiento:</h2>
+<h3>
+    Estado actual: <a style="margin-top: 20px; color: 
+    {% if order.estado == 'En proceso' %}#0000FF
+    {% elif order.estado == 'Entregado' %}#008000
+    {% elif order.estado == 'Enviado' %}#90EE90
+    {% elif order.estado == 'No se ha realizado el pago' %}#FF0000
+    {% endif %};"> 
+    {{order.estado}}</a>
+</h3>
+
+    {% if not order.enviado %}
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            
+            <button type="submit" class="btn btn-primary" >Marcar como enviado</button>
+         
+        </form>
+    {% endif %}
+
+    {% if order.enviado and not order.entregado %}
+        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+
+            <button type="submit" class="btn btn-primary" >Marcar como entregado</button>
+         
+        </form>
+    {% endif %}
+
+</div>
+
+{% endblock %}

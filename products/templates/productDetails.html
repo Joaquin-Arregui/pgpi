@@ -33,10 +33,10 @@
         </div>
         {% endif %}
         <div>
-            {% if user.is_authenticated %}
+            {% if user.is_staff%}
             <user class="is_staff">
-                <a href="{% url 'products:product' object.slug %}/edit" class="btn btn-outline-warning btn-sm ">Edit</a> 
-                <a href="{% url 'products:product_delete' object.slug %}?quantity=1" class="btn btn-outline-warning btn-sm ">Delete</a> 
+                <a href="{% url 'products:product' object.slug %}/edit" class="btn btn-outline-warning btn-sm ">Editar</a> 
+                <a href="{% url 'products:product_delete' object.slug %}?quantity=1" class="btn btn-outline-warning btn-sm ">Eliminar</a> 
            </user> 
            {% endif %}
            </div>
