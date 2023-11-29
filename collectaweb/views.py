@@ -9,17 +9,21 @@ from .forms import RegisterForm
 #from django.contrib.auth.models import User
 from products.models import Product
 from users.models import User
+from django.core.paginator import Paginator
 
 #Vistas basadas en clases. Agilizas el proceso porque usas django, mover a view del proyecto
 
 def index(request):
     products = Product.objects.all().order_by('-id')
+    paginator = Paginator(products, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'index.html', {
         #contexto
         'message': 'Listado de produtos',
         'title': 'Productos',
-        'products': products,
+        'page_obj': page_obj,
         })
 
 

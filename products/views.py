@@ -1,25 +1,27 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
-from .models import Product
+from .models import Product, Producer
 from django.views.generic.detail import DetailView
 #la clase q permite una consulta con diferentes filtros
 from django.db.models import Q
 
 class ProductListView(ListView):
+    paginate_by=5
     template_name = 'index.html'
     #consulta
     queryset = Product.objects.all().order_by('-id')
 
     #pasar el contexto de la clase al template
     def get_context_data(self, **kwargs):
+        producers = Producer.objects.all()
         context = super().get_context_data(**kwargs)
+        context['producers'] = producers
         context['message'] = 'Listado de Productos'
         print(context)
         context['products'] = context['object_list'] 
         return context
 
-#obtener el detalle de un producto
-class ProductDetailView(DetailView):  #id va a ser de la pk
+class ProductDetailView(DetailView):
     model = Product
     template_name = 'product.html'
 
@@ -88,13 +90,8 @@ def ProductEditView(request, slug):
 
 class ProductSearchListView(ListView):
     template_name = 'searchResults.html'
-    #consulta
-    #queryset = Product.objects.all().order_by('-id')
-
-    #pasar el contexto de la clase al template
     def get_queryset(self):
         filters = Q(title__icontains=self.query()) | Q(category__title__icontains=self.query())
-        #SELCT * FROM products WHERE title like %valor%
         return Product.objects.filter(filters)
 
     def query(self):
@@ -106,3 +103,49 @@ class ProductSearchListView(ListView):
         context['count'] = context['object_list'].count()
         print('Este es query', context['query'])
         return context
+    
+class ProductFilterListView(ListView):
+    template_name = 'filterResults.html'
+    def get_queryset(self):
+        min, max, producer = self.query()
+        products = Product.objects.all()
+        if not min=='':
+            products = products.filter(price__gte=min)
+        if not max=='':
+            products = products.filter(price__lte=max)
+        if not producer=='':
+            products = products.filter(producer=producer)
+        return products
+
+    def query(self):
+        min = self.request.GET.get('min')
+        max = self.request.GET.get('max')
+        producer = self.request.GET.get('producer')
+        return min, max, producer
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        min, max, producer = self.query()
+        if min=='':
+            min = 'No se ha establecido'
+        context['min'] = min
+        if max=='':
+            max = 'No se ha establecido'
+        context['max'] = max
+        if producer=='':
+            producer = 'No se ha establecido'
+        else: 
+            producer = get_object_or_404(Producer,pk=producer).title
+        context['producer'] = producer
+        context['count'] = context['object_list'].count()
+        return context
+    
+
+def comentar(request):
+    slug= request.GET.get('product_id')
+    comentario= request.GET.get('comment')
+    product = get_object_or_404(Product, pk=slug)
+    user = request.user.get_full_name()
+    product.comments[user] = comentario
+    product.save()
+    return redirect('/product/'+product.slug)

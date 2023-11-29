@@ -30,21 +30,10 @@ def add(request):
     product.stock = new_stock
     product.save()
     cart_product = CartProducts.objects.create_or_update_quantity(cart=cart, product=product, quantity=quantity)
-    #esta forma de agregar no esta BIEN PORQUE CADA VEZ QUE AGREGO NUEVOS NO SE ACTUALIZA, SOLO LOS QUE ENVIE EN EL MOMENTO
-    #cart.products.add(product, through_defaults={
-    #    'quantity': quantity
-    #    
-    #})
-    #'product_id' es el nombre del formulario html donde obtiene el id del producto
     product = Product.objects.get(pk=product_id)
-    #cart es una instacia del modelo por lo que para acceder a atributo products es la relacion ManytoMany
     cart.products.add(product)
 
-    return render(request, 'carts/add.html', {
-        'quantity': quantity,
-        'product': product,
-        'cp': cart_product
-    })
+    return redirect('/product/'+product.slug)
 
 def remove(request):
     cart = get_or_create_cart(request)

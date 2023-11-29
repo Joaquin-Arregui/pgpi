@@ -1,14 +1,24 @@
 {% extends 'base.html'%}
 {% block content %}
-  <div class="col-10">
-    <br>
-    <h3 style="text-align:center">Listado de Productos</h3>
-    <ul class="list-group">
+  <div class="row">
+    <div class="col-10" >
       <br>
-      {% include 'searchBar.html' %}
-      <hr>
-      {% include 'list.html' %}
-    </ul>
+      <h3 style="text-align:center">Listado de Productos</h3>
+      <ul class="list-group">
+        <br>
+        {% include 'searchBar.html' %}
+        <hr>
+        {% include 'list.html' %}
+      </ul>
+    </div>
+    {%include 'filter.html' %}
   </div>
 {% endblock %}
 {% load static %}
+
+<style>
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+ </style>
