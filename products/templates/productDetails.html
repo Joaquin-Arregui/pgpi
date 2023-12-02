@@ -57,32 +57,29 @@ document.getElementById('form').addEventListener('submit', function(e) {
    }
    const product = "{{ product.id }}";
    const url = `{% url 'carts:add' %}?quantity=${quantity}&product_id=${product}`;
-   // Create a new XMLHttpRequest object
+
    var xhr = new XMLHttpRequest();
 
-   // Configure it: POST-request for the URL /carts/add/
+
    xhr.open('post', url, true);
 
-   // Send the proper header information along with the request
+
    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
    xhr.setRequestHeader('X-CSRFToken', csrftoken);
 
-   // What to do when the request is successful
    xhr.onload = function() {
        if (xhr.status === 200) {
            alert("Se ha añadido al carrito correctamente");
        } else {
-           // The request failed
+
            alert('An error occurred during the transaction');
        }
    };
 
-   // What to do when the request fails
    xhr.onerror = function() {
        console.error('An error occurred during the transaction');
    };
 
-   // Finally, send the request
    xhr.send();
 });
 

@@ -6,12 +6,9 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate
 from .forms import RegisterForm
-#from django.contrib.auth.models import User
 from products.models import Product
 from users.models import User
 from django.core.paginator import Paginator
-
-#Vistas basadas en clases. Agilizas el proceso porque usas django, mover a view del proyecto
 
 def index(request):
     products = Product.objects.all().order_by('-id')
@@ -20,7 +17,7 @@ def index(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'index.html', {
-        #contexto
+        
         'message': 'Listado de produtos',
         'title': 'Productos',
         'page_obj': page_obj,
@@ -35,22 +32,23 @@ def logout_view(request):
 
 
 def register(request):
-    #si el usuario esta atenticado voy a redirigir a index
+
     if request.user.is_authenticated:
         return redirect('index')
 
     form = RegisterForm(request.POST or None)
     
     if request.method == 'POST' and form.is_valid():
+        user=User.objects.create(
+            username=form.cleaned_data["username"],
+            first_name= form.cleaned_data["first_name"],
+            last_name= form.cleaned_data["last_name"],
+            email= form.cleaned_data["email"],
+            password=form.cleaned_data["password"]
+        )
 
-        #cleaned_data es un diccionario
-        #username = form.cleaned_data.get('username')
-        #email = form.cleaned_data.get('email')
-        #password = form.cleaned_data.get('password')
-        #AHORA OBTENGO ESTO DEL METODO DEL FORM 
-        user = form.save()
 
-        #user = User.objects.create_user(username=username, email=email, password=password)
+
         if user:
             login(request, user)
             messages.success(request, 'Usuario creado exitosamente')
@@ -62,18 +60,19 @@ def register(request):
 
 @csrf_protect
 def login_view(request):
-    #si el usuario esta atenticado voy a redirigir a index
+
     if request.user.is_authenticated:
         return redirect('index')
     if request.method == 'POST':
-        username = request.POST.get('username') #es un diccionario con dos llaves con .get obtenemos una llave si existe
+        username = request.POST.get('username') 
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
+        if not user:
+            user=User.objects.filter(email=username,password=password).first()
         if user:
             login(request, user)
             messages.success(request, 'Bienvenido {}'.format(user.username))
-            #si la peticion posee el parametro next hacemos un redirect
             if request.GET.get('next'):
                 return HttpResponseRedirect(request.GET['next'] )
             return redirect('index')

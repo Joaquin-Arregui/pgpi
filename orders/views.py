@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from carts.utils import get_or_create_cart
-from .models import Order
+from .models import Order, Cart
 from django.contrib.auth.decorators import login_required
 from .utils import breadcrumb
 from django.utils import timezone
@@ -37,8 +37,12 @@ def estado(request):
     context = {'order': order}
     return render(request, 'orders/estadopedido.html', context)
 
-def pago(request,slug):
-    order = get_object_or_404(Order, order_id=slug)
+def pago(request):
+    id= request.GET.get("cart")
+    cart = get_object_or_404(Cart, pk=id)
+    order=Order.objects.create(
+    cart=cart,
+    user=request.user if request.user.is_authenticated else None)
     context = {'order': order}
     if request.method == 'POST':
 
