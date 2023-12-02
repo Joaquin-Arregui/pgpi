@@ -31,10 +31,19 @@
                         <a href="{% url 'products:product' product.slug %}">
                             {{ product.title}}
                         </a>
-                        {% include 'carts/snippets/remove.html'%}
+                        <form class="remove-cart-form" method="post" action="{% url 'carts:remove' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ cp.product.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
                     </th>
                     <th>
-                        {{ cp.quantity}}
+                        <form class="update-cart-form" method="post" action="{% url 'carts:update_cart' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ cp.product.id }}">
+                            <input type="number" name="quantity" value="{{ cp.quantity }}" min="1" max="{{product.stock}}">
+                            <button type="submit" class="btn btn-primary btn-sm">Actualizar</button>
+                        </form>
                     </th>
                     <th>
                         <span class="font-weight-bold text-danger">{{product.price | price_format}}</span>
@@ -62,10 +71,10 @@
 
 {% else %}
 <div class="col">
-    <p class="h3">Tu carrito de compras está vacío.</p>
-    <a href="{% url 'index' %}">Seguir comprando</a>
-
+    <div class="text-center" style="margin-top:20px">
+        <p class="h3">Tu carrito de compras está vacío.</p>
+        <a href="{% url 'index' %}" class="btn btn-primary">Seguir comprando</a>
+    </div>
 </div>
 {% endif %}
-
 {% endblock  %}
