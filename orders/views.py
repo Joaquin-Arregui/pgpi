@@ -74,6 +74,38 @@ def pago(request):
         return redirect('/order/envio/' + order.order_id)
     return render(request, 'orders/pasarelapago.html', context)
 
+def pagocontrareembolso(request):
+    id= request.GET.get("cart")
+    cart = get_object_or_404(Cart, pk=id)
+    order=Order.objects.create(
+    cart=cart,
+    user=request.user if request.user.is_authenticated else None)
+    context = {'order': order}
+    if request.method == 'POST':
+
+        nombre = request.POST.get('firstName')
+        apellidos = request.POST.get('lastName')
+        calle = request.POST.get('street')
+        numero = request.POST.get('number')
+        codigopostal = request.POST.get('postalCode')
+        ciudad = request.POST.get('city')    
+
+
+        order.nombre=nombre
+        order.apellidos=apellidos
+        order.calle = calle
+        order.numero = numero
+        order.codigopostal=codigopostal
+        order.ciudad=ciudad
+
+
+        order.save()
+
+
+        return redirect('/order/envio/' + order.order_id)
+    return render(request, 'orders/pagocontrareembolso.html', context)
+
+
 def SeguimientoDeleteView(request):
     order_id = request.GET.get('slug')
     order = Order.objects.filter(order_id=order_id).first()

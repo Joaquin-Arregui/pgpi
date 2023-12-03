@@ -3,12 +3,19 @@
 
 {% block content %}
 
-    <div class="col">
-        <h1>Perfil de {{ user.username }}</h1>
-        <div class="mr-3">
-            <p class="card-text">Nombre: {{ user.first_name }}</p>
-            <p class="card-text">Apellidos: {{ user.last_name }}</p>
-            <p class="card-text">Email: {{ user.email }}</p>
-        </div>
+<div class="col" style="display: flex; flex-direction: column; align-items: center;">
+    <div style="border: 2px solid black; padding: 10px; margin: 10px; width: 50%;">
+        <h1 style="font-weight: bold; font-size: 24px;">Perfil de {{ user.username }}</h1>
     </div>
+    <div style="border: 2px solid black; padding: 10px; margin: 10px; width: 50%;">
+        <p class="card-text" style="font-size: 18px;">Nombre: {{ user.first_name }}</p>
+    </div>
+    <div style="border: 2px solid black; padding: 10px; margin: 10px; width: 50%;">
+        <p class="card-text" style="font-size: 18px;">Apellidos: {{ user.last_name }}</p>
+    </div>
+    <div style="border: 2px solid black; padding: 10px; margin: 10px; width: 50%;">
+        <p class="card-text" style="font-size: 18px;">Email: {{ user.email }}</p>
+    </div>
+</div>
+
 {% endblock %}
