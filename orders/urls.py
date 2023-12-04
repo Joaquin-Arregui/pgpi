@@ -11,5 +11,6 @@ urlpatterns = [
     path('pago/<slug:slug>/', views.pago, name='pago' ),
     path('edit',views.SeguimientoEditView , name="edit"),
     path('delete',views.SeguimientoDeleteView , name="delete"),
+    path('list',views.SeguimientoListView, name="list"),
     
 ]

@@ -30,6 +30,7 @@
     
     <div class="navbar-nav ml-auto">
       {% if user.is_staff %}
+      <a href="/order/list" class="btn btn-outline-warning btn-sm ">Listado de pedidos</a> 
       <a href="/product/create/" class="btn btn-outline-warning btn-sm ">Crear Producto</a> 
       <a href="/categories/create/" class="btn btn-outline-warning btn-sm ">Crear Categoria</a> 
       <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/cart" style="color:white">
