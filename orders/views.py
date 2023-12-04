@@ -4,7 +4,7 @@ from .models import Order, Cart
 from django.contrib.auth.decorators import login_required
 from .utils import breadcrumb
 from django.utils import timezone
-# Create your views here.
+
 
 @login_required(login_url='login')
 def order(request):
@@ -40,10 +40,22 @@ def estado(request):
 def pago(request):
     id= request.GET.get("cart")
     cart = get_object_or_404(Cart, pk=id)
+    pago=request.GET.get("pago")
+    if pago=="tarjeta":
+        pago=True
+    else:
+        pago=False
+    envio=request.GET.get("envio")
+    if not envio=="tienda":
+        envio=True
+    else:
+        envio=False
     order=Order.objects.create(
     cart=cart,
     user=request.user if request.user.is_authenticated else None)
-    context = {'order': order}
+    context = {'order': order,
+                'pago':pago,
+                'envio':envio}
     if request.method == 'POST':
 
         nombre = request.POST.get('firstName')
@@ -123,24 +135,22 @@ def SeguimientoEditView(request):
         
         order.enviado  = timezone.now()
         
-        # update other fields as necessary
 
-        # save the product
+
         order.save()
 
-        # redirect to the same page after saving
         return redirect('/order/edit?slug=' + order_id)
     
     if request.method == 'POST' and order.enviado:
         
         order.entregado = timezone.now()
         
-        # update other fields as necessary
 
-        # save the product
+
+
         order.save()
 
-        # redirect to the same page after saving
+
         return redirect('/order/edit?slug=' + order_id)
     
     return render(request, 'orders/orderEdit.html', {
