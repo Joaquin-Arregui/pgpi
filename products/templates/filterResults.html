@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col">
+        <br>
+        {% include 'searchBar.html' %}
+        <hr>
+        <p><strong>Filtros de busqueda:</strong> Precio mínimo: {{min}}, Precio máximo: {{max}}, Productora: {{producer}} ({{count}})</p>
+        {% include 'list.html' %}
+    </div>
+{% endblock %}

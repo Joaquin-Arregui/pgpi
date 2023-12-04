@@ -10,7 +10,7 @@ from django.db.models.signals import pre_save
 
 class Order(models.Model):
     order_id = models.CharField(max_length=100, null=False, blank=False, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     shipping_total = models.DecimalField(default=5, max_digits=8, decimal_places=2)
     total = models.DecimalField(default=0, max_digits=8, decimal_places=2)
@@ -40,16 +40,14 @@ class Order(models.Model):
         self.save()
 
     def estado(self):
-        if self.tarjeta==None:
-            res= "No se ha realizado el pago"
-        else:
-            res= "En proceso"
 
-            if self.enviado != None:
-                if self.entregado !=None:
-                    res= "Entregado"
-                else:
-                    res= "Enviado"
+        res= "En proceso"
+
+        if self.enviado != None:
+            if self.entregado !=None:
+                res= "Entregado"
+            else:
+                res= "Enviado"
         return res
         
 

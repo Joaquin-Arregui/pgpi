@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.utils.text import slugify
 from django.db.models.signals import pre_save
+from producer.models import Producer
 # Create your models here.
 class Product(models.Model):
     title = models.CharField(max_length=50)
@@ -11,19 +12,13 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='products/', null=True, blank=False)
     stock = models.IntegerField(default=0)
+    comments = models.JSONField(default=dict, null=True, blank=True)
+    producer = models.ForeignKey(Producer, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
 
-#    def save(self, *args, **kwargs):
-#        self.slug = slugify(self.title)
-#        super(Product, self).save(*args, **kwargs) 
 
-#    def delete(self, *args, **kwargs):
-#        self.slug = slugify(self.title)
-#        super(Product, self).delete(*args, **kwargs) 
-
-    
 def set_slug(sender, instance, *args, **kwargs):
     if instance.title and not instance.slug:
         slug = slugify(instance.title)
@@ -32,6 +27,5 @@ def set_slug(sender, instance, *args, **kwargs):
             print("Este es slug", slug)
 
         instance.slug = slug
-#antes que un objeto Product se almacene, se ejecutara el callback set_slug
 pre_save.connect(set_slug, sender=Product)
 

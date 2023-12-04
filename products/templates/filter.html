@@ -1,0 +1,23 @@
+<div class="col-lg-2">
+    <h3 class="my-4">Filtros</h3>
+    <form action="{% url 'products:filter' %}">
+        <div class="input-group">
+            <div>
+                <a>Precio mínimo:</a>
+                <input type="number" min="0" name="min" value="{{query}}" class="form-control" style="min-width:60px;">
+                Precio máximo:
+                <input type="number" min="0" name="max" value="{{query}}" class="form-control"style="min-width:60px;">
+                Productora:
+                <select name="producer" class="form-control" style="min-width:60px;">
+                    <option value="">---</option>
+                    {% for producer in producers %}
+                        <option value="{{ producer.id }}">{{ producer.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group-append" style="padding-top: 10px;">
+                <input type="submit" name="" value="Buscar" class="btn btn-success" style="min-width:60px;">
+            </div>
+        </div>
+    </form>
+</div>
