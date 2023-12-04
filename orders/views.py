@@ -3,6 +3,7 @@ from carts.utils import get_or_create_cart
 from .models import Order, Cart
 from django.contrib.auth.decorators import login_required
 from .utils import breadcrumb
+from django.views.generic.list import ListView
 from django.utils import timezone
 
 
@@ -125,6 +126,16 @@ def SeguimientoDeleteView(request):
     Order.delete(order)
 
     return redirect('/')
+
+def SeguimientoListView(request):
+    orders = Order.objects.all().order_by('-id')
+    context = {
+        'message': 'Listado de Productos',
+        'orders': orders,
+    }
+    return render(request, 'orders/listOrders.html', context)
+    #orders = Order.objects.all().order_by('-id')
+    #return render(request, 'orders/listOrders.html', {'orders': orders})
 
 def SeguimientoEditView(request):
     order_id = request.GET.get('slug')

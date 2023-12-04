@@ -30,6 +30,8 @@
     
     <div class="navbar-nav ml-auto">
       {% if user.is_staff %}
+      <a href="/users/list" class="btn btn-outline-warning btn-sm ">Usuarios</a> 
+      <a href="/order/list" class="btn btn-outline-warning btn-sm ">Pedidos</a> 
       <a href="/product/create/" class="btn btn-outline-warning btn-sm ">Crear Producto</a> 
       <a href="/categories/create/" class="btn btn-outline-warning btn-sm ">Crear Categoria</a> 
     </a>
