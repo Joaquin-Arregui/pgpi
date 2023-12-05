@@ -20,4 +20,42 @@
             </div>
         </div>
     </form>
+    <h3 class="my-4">Carrito</h3>
+    {% if cart.products.exists %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th  scope="row">🛍️ Producto</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for cp in cart.products_related %}
+                {% with product=cp.product %}
+            <tr>
+                <th>{{ forloop.couter }}</th>
+                <th> 
+                    {% if product.image %}
+                    <img src="{{ product.image.url}}" alt="Imagen del Producto" width="10" height="10">
+                    {% endif%}
+                </th>
+                <th>
+                    <a href="{% url 'products:product' product.slug %}">
+                        {{ product.title}}
+                    </a>
+                </th>
+            </tr>
+                {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="col">
+        <div class="text-center" style="margin-top:20px">
+            <p class="h3">Tu carrito de compras está vacío.</p>
+         </div>
+    </div>
+    {% endif %}
 </div>
