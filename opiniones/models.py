@@ -1,0 +1,10 @@
+
+from django.db import models
+from users.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
+# Create your models here.
+class Opinion(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    nota = models.SmallIntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    desc = models.TextField(null=True,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)

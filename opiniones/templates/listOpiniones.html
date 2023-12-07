@@ -1,0 +1,22 @@
+{% load static %}
+<div class="row">
+    {% for object in opiniones %}
+         <ul class="list-group">
+               <hr>
+               <li class="list-group-item">
+                 <div class="d-flex justify-content-between align-items-start" style="width: 925px;">
+                      <div class="mr-3">
+                            <h4 class="card-title">{{object.user.username}}</h4>
+                            <p class="card-title">&nbsp&nbsp&nbspNota: {{object.nota}}</p>
+                            <p class="card-text">&nbsp&nbsp&nbspOpinion: {{object.desc }}</p>
+                      </div>
+                      {% if user.is_staff %}
+                      <div class="d-flex flex-column">
+                         <a href="/opiniones/delete?id={{object.id}}" class="btn btn-outline-warning btn-sm ">Eliminar</a> 
+                      </div>
+                      {% endif %}
+                 </div>
+              </li>
+         </ul>
+    {% endfor %}
+ </div>
