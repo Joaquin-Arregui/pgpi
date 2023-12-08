@@ -40,16 +40,14 @@ class Order(models.Model):
         self.save()
 
     def estado(self):
-        if self.tarjeta==None:
-            res= "No se ha realizado el pago"
-        else:
-            res= "En proceso"
 
-            if self.enviado != None:
-                if self.entregado !=None:
-                    res= "Entregado"
-                else:
-                    res= "Enviado"
+        res= "En proceso"
+
+        if self.enviado != None:
+            if self.entregado !=None:
+                res= "Entregado"
+            else:
+                res= "Enviado"
         return res
         
 

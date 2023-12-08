@@ -23,7 +23,11 @@ def index(request):
         'page_obj': page_obj,
         })
 
-
+def info(request):
+    return render(request, 'info.html', {
+        #'title': 'Información de la Empresa',
+        #'informacion': 'Esta es la información sobre nuestra empresa.',
+    })
 
 def logout_view(request):
     logout(request)

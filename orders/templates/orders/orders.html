@@ -1,0 +1,32 @@
+{% load static %}
+<div class="row">
+    {% for object in orders %}
+         <ul class="list-group">
+               <hr>
+               <li class="list-group-item">
+                 <div class="d-flex justify-content-between align-items-start" style="width: 925px;">
+                      <div class="mr-3">
+                        <h4 class="card-title" ><span style="color: blue;">{{object.order_id}}</span> esta: <span style="color: 
+                          {% if object.estado == 'En proceso' %}#0000FF
+                          {% elif object.estado == 'Entregado' %}#008000
+                          {% elif object.estado == 'Enviado' %}#90EE90
+                          {% elif object.estado == 'No se ha realizado el pago' %}#FF0000
+                          {% endif %};">
+                          {{object.estado}}</span></h4>
+                          <h3 class="card-title">Descripción del pedido:</h3>
+                          <p class="card-text"> Nombre: {{object.nombre }}</p>
+                          <p class="card-text"> Apellidos: {{object.apellidos }}</p>
+                          <p class="card-text"> Calle: {{object.calle }}</p>
+                          <p class="card-text"> Numero: {{object.numero }}</p>
+                          <p class="card-text"> Codigo Postal: {{object.codigopostal }}</p>
+                          <p class="card-text"> Ciudad: {{object.ciudad }}</p>
+                          <a href="{% url 'orders:edit' %}?slug={{object.order_id}}" class="btn btn-outline-warning btn-sm ">Editar pedido</a> 
+                          <a href="{% url 'orders:delete' %}?slug={{object.order_id}}" class="btn btn-outline-warning btn-sm ">Eliminar pedido</a> 
+                      </div>
+                 </div>
+              </li>
+         </ul>
+    {% endfor %}
+ </div>
+
+

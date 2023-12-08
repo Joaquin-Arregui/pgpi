@@ -12,6 +12,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-custom">
   <a class="navbar-brand" href="{% url 'index'  %}" style="color:white">🏪 Collecta</a>
+  <a class="nav-link" href="{% url 'info' %}" style="color:white">Sobre nosotros</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -30,6 +31,8 @@
     
     <div class="navbar-nav ml-auto">
       {% if user.is_staff %}
+      <a href="/users/list" class="btn btn-outline-warning btn-sm ">Usuarios</a> 
+      <a href="/order/list" class="btn btn-outline-warning btn-sm ">Pedidos</a> 
       <a href="/product/create/" class="btn btn-outline-warning btn-sm ">Crear Producto</a> 
       <a href="/categories/create/" class="btn btn-outline-warning btn-sm ">Crear Categoria</a> 
     </a>
