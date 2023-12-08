@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import include
 from users.views import *
+from .views import info
 
 urlpatterns = [
     path('', ProductListView.as_view(), name="index"),
@@ -33,6 +34,7 @@ urlpatterns = [
     path('cart/', include('carts.urls')),
     path('order/', include('orders.urls')),
     path('profile/', perfil ,name = "perfil"),
+    path('info/', info, name='info'),
     path('users/', include('users.urls'))
 ]
 
