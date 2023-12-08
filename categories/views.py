@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect
 from carts.utils import get_or_create_cart
 from .models import Category
 from django.views.generic.list import ListView
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
+from users.models import Admin
 
 def categories(request):
     categories = Category.objects.all()
@@ -18,6 +21,8 @@ def category(request, slug):
         'category': category.title
     })
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def CategoryDeleteView(request, slug):
     category = Category.objects.filter(slug=slug).first()
 
@@ -25,6 +30,8 @@ def CategoryDeleteView(request, slug):
 
     return redirect('/categories' )
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def CategoryCreateView(request):
 
     if request.method == 'POST':
@@ -44,6 +51,8 @@ def CategoryCreateView(request):
 
     return render(request, 'categoryCreate.html')
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def CategoryEditView(request, slug):
     category = Category.objects.filter(slug=slug).first()
 
