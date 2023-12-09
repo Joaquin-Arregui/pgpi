@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from .utils import breadcrumb
 from django.views.generic.list import ListView
 from django.utils import timezone
+from django.conf import settings
+from django.core.mail import send_mail
 
 
 @login_required(login_url='login')
@@ -26,6 +28,27 @@ def order(request):
 
 def envio(request, slug):
     order = get_object_or_404(Order, order_id=slug)
+    
+    # Construir el contenido del correo con detalles de todos los productos
+    cart_products = order.cart.products_related()
+
+    # Construir el contenido del correo con detalles de todos los productos y cantidades
+    email_content = f'Gracias por tu compra en nuestro sitio.\n\nDetalles de la compra:\n\n'
+    for cart_product in cart_products:
+        email_content += f"Producto: {cart_product.product.title}\n"
+        email_content += f"Cantidad: {cart_product.quantity}\n"
+        # Agrega otros detalles del producto según sea necesario
+
+    email_content += f'Importe: {order.total}\nDirección de entrega: {order.calle} {order.numero}, {order.ciudad}, {order.codigopostal}'
+
+    # Envío del correo
+    send_mail(
+        'Confirmación de compra',
+        email_content,
+        'collectaweb.pgpi@gmail.com',  # Reemplaza con tu dirección de correo electrónico
+        [request.user.email],  # Reemplaza con el correo electrónico del usuario
+        fail_silently=False,
+    )
     context = {'order': order}
     return render(request, 'orders/id_envio.html', context)
 
