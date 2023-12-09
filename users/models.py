@@ -10,8 +10,9 @@ class User(AbstractUser):
 
 class Admin(User):
 
-    def get_user_permissions( obj: User | None = ...):
-        return User.is_staff
+    @staticmethod
+    def get_user_permissions(user):
+        return user.is_staff and user.is_authenticated
 
 class Customer(User):
 
