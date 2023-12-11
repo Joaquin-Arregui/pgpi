@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect
 from django.views.generic.detail import DetailView
 from .models import User
+from carts.utils import get_or_create_cart
 
 def perfil(request):
+    cart = get_or_create_cart(request)
     if request.method == 'POST':
         user=request.user
         nombre = request.POST.get('firstName')
@@ -29,13 +31,17 @@ def perfil(request):
 
         user.save()
 
-    return render(request, 'perfil.html')
+    return render(request, 'perfil.html', {
+        'cart': cart
+    })
 
 class perfilDetalle(DetailView):
     model = perfil
     template_name = 'perfil.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        cart = get_or_create_cart(self.request)
+        context['cart'] = cart
         return context
 
 def UserDeleteView(request):

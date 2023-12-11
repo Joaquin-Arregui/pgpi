@@ -34,7 +34,6 @@ def envio(request, slug):
         email_content += f"Producto: {cart_product.product.title}\n"
         email_content += f"Cantidad: {cart_product.quantity}\n"
         # Agrega otros detalles del producto según sea necesario
-
     email_content += f'Importe: {order.total}\nDirección de entrega: {order.calle} {order.numero}, {order.ciudad}, {order.codigopostal}'
 
     # Envío del correo
@@ -42,21 +41,32 @@ def envio(request, slug):
         'Confirmación de compra',
         email_content,
         'collectaweb.pgpi@gmail.com',  # Reemplaza con tu dirección de correo electrónico
-        [request.user.email],  # Reemplaza con el correo electrónico del usuario
+        [order.correo],  # Reemplaza con el correo electrónico del usuario
         fail_silently=False,
     )
     context = {'order': order}
     return render(request, 'orders/id_envio.html', context)
 
 def seguimiento(request):
-    orders = Order.objects.filter(user=request.user).order_by('-id')
-    context = {'orders': orders, 'admin': False }
-    return render(request, 'orders/seguimiento.html', context)
+    user = request.user if request.user.is_authenticated else None
+    cart = get_or_create_cart(request)
+    if user != None:
+        orders = Order.objects.filter(user=request.user).order_by('-id')
+    else:
+        orders = None
+    for order in orders:
+        print(order)
+    return render(request, 'orders/seguimiento.html', {
+        'object_list': orders, 
+        'admin': False, 
+        'cart': cart
+        })
 
 def estado(request):
     order_id = request.GET.get('slug')
+    cart = get_or_create_cart(request)
     order = get_object_or_404(Order, order_id=order_id)
-    context = {'order': order}
+    context = {'order': order, 'cart': cart}
     return render(request, 'orders/estadopedido.html', context)
 
 def pago(request):
@@ -73,7 +83,8 @@ def pago(request):
     else:
         envio=False
     context = {'pago':pago,
-                'envio':envio}
+                'envio':envio,
+                'cart':cart}
     if request.method == 'POST':
         cart.user = None
         cart.save()
@@ -93,7 +104,8 @@ def pago(request):
         fechacad = request.POST.get('expiryDate')
         guardar = request.POST.get('save')
 
-
+        order.subtotal = cart.subtotal 
+        order.update_total()
         order.nombre=nombre
         order.apellidos=apellidos
         order.correo=correo
@@ -137,8 +149,9 @@ def SeguimientoDeleteView(request):
 
 def SeguimientoListView(request):
     orders = Order.objects.all().order_by('-id')
+    cart = get_or_create_cart(request)
     context = {
-        'orders': orders, 'admin': True
+        'orders': orders, 'admin': True, 'cart': cart
     }
     return render(request, 'orders/listOrders.html', context)
     #orders = Order.objects.all().order_by('-id')
@@ -147,7 +160,8 @@ def SeguimientoListView(request):
 def SeguimientoEditView(request):
     order_id = request.GET.get('slug')
     order = Order.objects.filter(order_id=order_id).first()
-    context = {'order': order}
+    cart = get_or_create_cart(request)
+    context = {'object_list': order, 'cart': cart}
     
     if request.method == 'POST' and not order.enviado:
         
