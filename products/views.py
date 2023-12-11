@@ -122,6 +122,8 @@ class ProductSearchListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = get_or_create_cart(self.request)
+        producers = Producer.objects.all()
+        context['producers'] = producers
         context['cart'] = cart
         context['query'] = self.query()
         context['count'] = context['object_list'].count()
@@ -148,7 +150,8 @@ class ProductFilterListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart = get_or_create_cart(cart)
+
+        cart = get_or_create_cart(self.request)
         context['cart'] = cart
         min, max, producer = self.query()
         if min=='':
@@ -160,7 +163,9 @@ class ProductFilterListView(ListView):
         if producer=='':
             producer = 'No se ha establecido'
         else: 
-            producer = get_object_or_404(Producer,pk=producer).title
+            producer = get_object_or_404(Producer,pk=producer)
         context['producer'] = producer
+        producers = Producer.objects.all()
+        context['producers'] = producers
         context['count'] = context['object_list'].count()
         return context

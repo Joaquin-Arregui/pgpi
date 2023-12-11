@@ -17,7 +17,7 @@ class Cart(models.Model):
 
     def shipping_cost(self):
         res = 0
-        if self.subtotal < 50:
+        if self.subtotal < 50 and self.subtotal > 0:
             res = 4.99
         return res
 
@@ -40,7 +40,7 @@ class Cart(models.Model):
         self.save() #actualzizamos en la base de datos
     
     def update_total(self):
-        self.total = self.subtotal + decimal.Decimal(self.shipping_cost())
+        self.total = decimal.Decimal(str(float(self.subtotal) + float(self.shipping_cost())))
         self.save() 
 
     def products_related(self):

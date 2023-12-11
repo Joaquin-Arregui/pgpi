@@ -70,11 +70,10 @@
  </div>
  <script>
      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-     const forms = document.querySelectorAll('form');
+     const forms = document.querySelectorAll('form_');
      forms.forEach(form => {
          form.addEventListener('submit', function(e) {
              e.preventDefault();
-             console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa')
              const quantity = parseInt(document.getElementById(`quantity_${form.name}`).value);
              const stock = parseInt("{{ object.stock }}");
         if (quantity<1)  {
@@ -85,7 +84,6 @@
          return;
         }
         const product = form.name
-        console.log(product);
         const url = `{% url 'carts:add' %}?quantity=${quantity}&product_id=${product}`;
      
         var xhr = new XMLHttpRequest();

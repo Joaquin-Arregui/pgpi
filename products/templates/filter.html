@@ -4,11 +4,11 @@
         <div class="input-group">
             <div>
                 <a>Precio mínimo:</a>
-                <input type="number" min="0" name="min" value="{{query}}" class="form-control" style="min-width:60px;">
+                <input type="number" id="min" min="0" name="min" value="{{query}}" class="form-control" style="min-width:60px;">
                 Precio máximo:
-                <input type="number" min="0" name="max" value="{{query}}" class="form-control"style="min-width:60px;">
+                <input type="number" id="max" min="0" name="max" value="{{query}}" class="form-control"style="min-width:60px;">
                 Productora:
-                <select name="producer" class="form-control" style="min-width:60px;">
+                <select id="producer" name="producer" class="form-control" style="min-width:60px;">
                     <option value="">---</option>
                     {% for producer in producers %}
                         <option value="{{ producer.id }}">{{ producer.title }}</option>
@@ -21,3 +21,14 @@
         </div>
     </form>
 </div>
+
+<script>
+    window.onload = function(){
+        min = '{{min}}';
+        document.getElementById('min').value = min;
+        max = '{{max}}';
+        document.getElementById('max').value = max;
+        producer = '{{producer.id}}';
+        document.getElementById('producer').value = producer;
+    }
+</script>
