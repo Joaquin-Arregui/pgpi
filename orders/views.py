@@ -16,7 +16,6 @@ def order(request):
         order = Order.objects.create(cart=cart, user=request.user)
     if order:
         request.session['order_id'] = order.order_id
-    print('Este es cart de order', cart)
     return render(request, 'orders/order.html', {
         'cart': cart,
         'order': order,

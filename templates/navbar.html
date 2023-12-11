@@ -8,6 +8,7 @@
   span {
     font-size: 20px;
   }
+
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-custom">
@@ -34,10 +35,33 @@
       <a href="/categories/create/" class="btn btn-outline-warning btn-sm ">Crear Categoria</a> 
     </a>
     {% endif %}
-        <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/cart" style="color:white">
-          <span class="fas fa-cart-plus"></span>
-          Carrito
-        </a>
+        <li class="nav-item dropdown">
+          <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" role="button" id="carrito" data-toggle="dropdown" href="/cart" style="color:white">
+            <span class="fas fa-cart-plus"></span>
+            Carrito
+          </a>
+          <div class="dropdown-menu" aria-labelledby="carrito">
+            <a href="/cart" style="color:black;"><span class="fas fa-cart-plus" style="padding-left: 10px;"></span> Entrar al carrito</a><br>
+            {% for cp in cart.products_related %}
+              {% with product=cp.product %}
+              <hr>
+              <div style="text-align: center;">
+                {% if product.image %}
+                  <a href="{% url 'products:product' product.slug %}">
+                    <img src="{{ product.image.url}}" alt="Imagen del Producto" width="100" height="100">
+                  </a>
+                {% endif%}
+                <br>
+                <th>
+                    <a href="{% url 'products:product' product.slug %}">
+                        {{ product.title}}
+                    </a>
+                </th>
+              </div>
+              {% endwith %}
+            {% endfor %}
+          </div>
+        </li>
         {% if user.is_authenticated %}
         <a class="nav-item nav-link {% if request.path == logout %}active{% endif %}" href="/profile" style="color:white">
             <span class="fas fa-user"></span>

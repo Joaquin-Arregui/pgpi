@@ -19,7 +19,6 @@ def set_slug(sender, instance, *args, **kwargs):
         slug = slugify(instance.title)
         while Category.objects.filter(slug=slug).exists():
             slug = slugify("{}-{}".format(instance.title,str(uuid.uuid4())[:8]))
-            print("Este es slug", slug)
         instance.slug = slug
 
 pre_save.connect(set_slug, sender=Category)
