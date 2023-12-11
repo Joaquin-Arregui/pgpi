@@ -9,22 +9,26 @@ from .forms import RegisterForm
 from products.models import Product
 from users.models import User
 from django.core.paginator import Paginator
+from carts.utils import get_or_create_cart
 
 def index(request):
     products = Product.objects.all().order_by('-id')
     paginator = Paginator(products, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    cart = get_or_create_cart(request)
 
     return render(request, 'index.html', {
-        
+        'cart': cart,
         'message': 'Listado de produtos',
         'title': 'Productos',
         'page_obj': page_obj,
         })
 
 def info(request):
+    cart = get_or_create_cart(request)
     return render(request, 'info.html', {
+        'cart': cart
         #'title': 'Información de la Empresa',
         #'informacion': 'Esta es la información sobre nuestra empresa.',
     })

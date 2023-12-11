@@ -59,7 +59,9 @@
   <div class="card mt-4">
     <div class="card-body">
     <div class="font-weight-bold">
-        Subtotal: ({{ cart.products.count}}) <span class="text-danger">{{ cart.subtotal | price_format }}</span>
+        Subtotal: ({{ cart.products.count}}) <span class="text-danger">{{ cart.subtotal | price_format }}</span><br>
+        Gastos de Envio: <span class="text-danger">${{ cart.shipping_cost }}</span><br>
+        Total: <span class="text-danger">{{ cart.total | price_format }}</span>
     </div>
     <br>
     <select id="pago" class="form-control" style="min-width:60px;">

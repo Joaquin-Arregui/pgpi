@@ -60,17 +60,6 @@ def remove(request):
             return HttpResponse("Producto no encontrado en el carrito")
     else:
         return HttpResponse("Método no permitido")
-
-def prueba(request, slug):
-    cart = get_or_create_cart(request)
-    product = get_object_or_404(Product, pk=request.POST.get('product_id'))
-    #'product_id' es el nombre del formulario html donde obtiene el id del producto
-    product = Product.objects.get(pk=request.POST.get('product_id'))
-    #cart es una instacia del modelo por lo que para acceder a atributo products es la relacion ManytoMany
-    cart.products.remove(product)
-
-    return redirect('carts:cart')
-
 def update_cart(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')

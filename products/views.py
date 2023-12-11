@@ -1,23 +1,28 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from carts.utils import get_or_create_cart
 from django.views.generic.list import ListView
+
+from users.models import Admin
 from .models import Product, Producer
 from django.views.generic.detail import DetailView
 #la clase q permite una consulta con diferentes filtros
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+
 
 class ProductListView(ListView):
     paginate_by=5
     template_name = 'index.html'
-    #consulta
     queryset = Product.objects.all().order_by('-id')
 
-    #pasar el contexto de la clase al template
     def get_context_data(self, **kwargs):
         producers = Producer.objects.all()
         context = super().get_context_data(**kwargs)
+        cart = get_or_create_cart(self.request)
         context['producers'] = producers
+        context['cart'] = cart
         context['message'] = 'Listado de Productos'
-        print(context)
         context['products'] = context['object_list'] 
         return context
 
@@ -28,9 +33,12 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #print(context)
+        cart = get_or_create_cart(self.request)
+        context['cart'] = cart
         return context
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def ProductDeleteView(request, slug):
     producto = Product.objects.filter(slug=slug).first()
 
@@ -38,7 +46,10 @@ def ProductDeleteView(request, slug):
 
     return redirect('/')
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def ProductCreateView(request):
+    cart = get_or_create_cart(request)
     if request.method == 'POST':
         # get data from the form
         titulo = request.POST.get('titulo')
@@ -56,10 +67,15 @@ def ProductCreateView(request):
         # redirect to the product page after saving
         return redirect('/product/' + product.slug)
 
-    return render(request, 'productCreate.html')
+    return render(request, 'productCreate.html', {
+        'cart': cart
+    })
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def ProductEditView(request, slug):
     product = Product.objects.filter(slug=slug).first()
+    cart = get_or_create_cart(request)
 
     if request.method == 'POST':
         # get data from the form
@@ -71,11 +87,16 @@ def ProductEditView(request, slug):
         # add other fields as necessary
 
         # update the product
-        product.title = titulo
-        product.description = descripcion
-        product.price = precio
-        product.stock = stock
-        product.image = imagen
+        if titulo != None and titulo != '':
+            product.title = titulo
+        if descripcion != None and descripcion != '':
+            product.description = descripcion
+        if precio != None and precio != '':
+            product.price = precio
+        if stock != None and stock != '':
+            product.stock = stock
+        if imagen != None and imagen != '':
+            product.image = imagen
         # update other fields as necessary
 
         # save the product
@@ -85,7 +106,8 @@ def ProductEditView(request, slug):
         return redirect('/product/' + slug)
 
     return render(request, 'productEdit.html', {
-        'product': product
+        'product': product,
+        'cart': cart
     })
 
 class ProductSearchListView(ListView):
@@ -99,9 +121,10 @@ class ProductSearchListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        cart = get_or_create_cart(self.request)
+        context['cart'] = cart
         context['query'] = self.query()
         context['count'] = context['object_list'].count()
-        print('Este es query', context['query'])
         return context
     
 class ProductFilterListView(ListView):
@@ -125,6 +148,8 @@ class ProductFilterListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        cart = get_or_create_cart(cart)
+        context['cart'] = cart
         min, max, producer = self.query()
         if min=='':
             min = 'No se ha establecido'
@@ -139,13 +164,3 @@ class ProductFilterListView(ListView):
         context['producer'] = producer
         context['count'] = context['object_list'].count()
         return context
-    
-
-def comentar(request):
-    slug= request.GET.get('product_id')
-    comentario= request.GET.get('comment')
-    product = get_object_or_404(Product, pk=slug)
-    user = request.user.get_full_name()
-    product.comments[user] = comentario
-    product.save()
-    return redirect('/product/'+product.slug)

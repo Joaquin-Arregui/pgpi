@@ -12,7 +12,6 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='products/', null=True, blank=False)
     stock = models.IntegerField(default=0)
-    comments = models.JSONField(default=dict, null=True, blank=True)
     producer = models.ForeignKey(Producer, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -24,7 +23,6 @@ def set_slug(sender, instance, *args, **kwargs):
         slug = slugify(instance.title)
         while Product.objects.filter(slug=slug).exists():
             slug = slugify("{}-{}".format(instance.title,str(uuid.uuid4())[:8]))
-            print("Este es slug", slug)
 
         instance.slug = slug
 pre_save.connect(set_slug, sender=Product)

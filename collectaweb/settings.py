@@ -25,7 +25,7 @@ SECRET_KEY = '1nwwhhtq2(w(g_r*r1@$4*8uq4(%*v!%xd9-ntrw2l&7&@(p)e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fracamcam.pythonanywhere.com']
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'categories',
     'orders',
     'producer',
+    'opiniones',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
