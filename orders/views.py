@@ -49,22 +49,26 @@ def pago(request):
     if request.method == 'POST':
         cart.user = None
         cart.save()
+        request.session['cart_id'] = None
         order=Order.objects.create(
             cart=cart,
             user=request.user if request.user.is_authenticated else None)
         nombre = request.POST.get('firstName')
         apellidos = request.POST.get('lastName')
+        correo = request.POST.get('email')
         calle = request.POST.get('street')
         numero = request.POST.get('number')
         codigopostal = request.POST.get('postalCode')
         ciudad = request.POST.get('city')
         tarjeta = request.POST.get('cardNumber')
         cvv = request.POST.get('cvv') 
-        fechacad = request.POST.get('expiryDate')      
+        fechacad = request.POST.get('expiryDate')
+        guardar = request.POST.get('save')
 
 
         order.nombre=nombre
         order.apellidos=apellidos
+        order.correo=correo
         order.calle = calle
         order.numero = numero
         order.codigopostal=codigopostal
@@ -72,6 +76,20 @@ def pago(request):
         order.tarjeta=tarjeta
         order.cvv=cvv
         order.fechacad=fechacad
+
+        user = request.user if request.user.is_authenticated else None
+        if guardar and user !=None:
+            user.first_name=nombre
+            user.last_name=apellidos
+            user.email=correo
+            user.calle = calle
+            user.numero = numero
+            user.codigopostal=codigopostal
+            user.ciudad=ciudad
+            user.tarjeta=tarjeta
+            user.cvv=cvv
+            user.fechacad=fechacad
+            user.save()
 
 
         order.save()

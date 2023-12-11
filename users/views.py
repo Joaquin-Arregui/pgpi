@@ -3,6 +3,32 @@ from django.views.generic.detail import DetailView
 from .models import User
 
 def perfil(request):
+    if request.method == 'POST':
+        user=request.user
+        nombre = request.POST.get('firstName')
+        apellidos = request.POST.get('lastName')
+        correo = request.POST.get('email')
+        calle = request.POST.get('street')
+        numero = request.POST.get('number')
+        codigopostal = request.POST.get('postalCode')
+        ciudad = request.POST.get('city')
+        tarjeta = request.POST.get('cardNumber')
+        cvv = request.POST.get('cvv') 
+        fechacad = request.POST.get('expiryDate')      
+
+        user.first_name=nombre
+        user.last_name=apellidos
+        user.email=correo
+        user.calle = calle
+        user.numero = numero
+        user.codigopostal=codigopostal
+        user.ciudad=ciudad
+        user.tarjeta=tarjeta
+        user.cvv=cvv
+        user.fechacad=fechacad
+
+        user.save()
+
     return render(request, 'perfil.html')
 
 class perfilDetalle(DetailView):
