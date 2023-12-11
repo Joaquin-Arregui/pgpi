@@ -1,0 +1,34 @@
+{% load static %}
+<div class="row">
+    {% for object in opiniones %}
+         <ul class="list-group">
+               <hr>
+               <li class="list-group-item">
+                 <div class="d-flex justify-content-between align-items-start" style="width: 925px;">
+                         <div class="mr-3">
+                              <h4 class="card-title">{{object.user.username}}</h4>
+                              <p class="card-title">&nbsp&nbsp&nbspNota: {{object.nota}}</p>
+                              <p class="card-text">&nbsp&nbsp&nbspOpinion: {{object.desc }}</p>
+                         </div>
+                         <div class="d-flex flex-column">
+                              <div>
+                                   <a style="text-align: center; margin-top: 20px; color: 
+                                        {% if object.estado == 'Sin procesar' %}#FF0000
+                                        {% elif object.estado == 'En proceso' %}#EEB600
+                                        {% elif object.estado == 'Proceso completado' %}#008000
+                                        {% endif %};">
+                                        {{object.estado}}
+                                   </a>
+                              </div>
+                              <hr>
+                              {% if not object.estado == 'Proceso completado'%}
+                                   <div>
+                                        <a href="/opiniones/process?id={{object.id}}" class="btn btn-outline-warning btn-sm ">Procesar</a>
+                                   </div> 
+                              {% endif %}
+                      </div>
+                 </div>
+              </li>
+         </ul>
+    {% endfor %}
+ </div>

@@ -27,7 +27,12 @@
         <span class="fas fa-truck"></span>
         Seguimiento de pedidos
       </a>
-    
+      {% if user.is_authenticated %}
+      <a class="nav-item nav-link" href="/opiniones" style="color:white">
+        <span class="fas fa-pen"></span>
+        Opiniones
+      </a>
+      {% endif %}
     </div>
     
     <div class="navbar-nav ml-auto">

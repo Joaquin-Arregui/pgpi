@@ -14,6 +14,7 @@
         {% elif order.estado == 'No se ha realizado el pago' %}#FF0000
         {% endif %};">
         {{order.estado}}
+    </h2>
 </div>
 {% if user.is_staff %}
     <div class="col-10 d-flex justify-content-center my-4">
