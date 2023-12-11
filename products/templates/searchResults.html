@@ -1,10 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="col">
+  <div class="row">
+    <div class="col-10" >
+      <br>
+      <h3 style="text-align:center">Listado de Productos</h3>
+      <ul class="list-group">
         <br>
-        {% include 'searchBar.html' with query=query %}
+        {% include 'searchBar.html' %}
         <hr>
         <p>Resultados de la busqueda: {{query}} ({{count}})</p>
         {% include 'list.html' %}
+      </ul>
     </div>
+    {%include 'filter.html' %}
+  </div>
 {% endblock %}
+{% load static %}
+
+
+<style>
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+ </style>

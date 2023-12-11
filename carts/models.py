@@ -15,7 +15,11 @@ class Cart(models.Model):
     total = models.DecimalField(default=0.0, max_digits=8, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    FEE = 0.05 #comision del 5% de la compra
+    def shipping_cost(self):
+        res = 0
+        if self.subtotal < 50:
+            res = 4.99
+        return res
 
     def __str__(self):
         return self.cart_id
@@ -36,7 +40,7 @@ class Cart(models.Model):
         self.save() #actualzizamos en la base de datos
     
     def update_total(self):
-        self.total = self.subtotal*decimal.Decimal(1+Cart.FEE)
+        self.total = self.subtotal + decimal.Decimal(self.shipping_cost())
         self.save() 
 
     def products_related(self):
@@ -76,8 +80,6 @@ def set_cart_id(sender, instance, *args, **kwargs):
         instance.cart_id = str(uuid.uuid4())
 
 def update_totals(sender, instance, action, *args, **kwargs):
-    #cuando un producto se agrege, se elimine o el carrito se limpie
-    #se calcula el subtotal y total del carrito
     if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
         instance.update_totals()
 

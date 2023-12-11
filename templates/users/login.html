@@ -4,19 +4,19 @@
         {% block content %}
             <div class="col">
 
-                <h2> Login</h2>
+                <h2> Iniciar sesión</h2>
                 <form method="post">{% csrf_token %}
                     <div class="form-group">
-                        <label for="username">Username</label>
+                        <label for="username">Usuario o correo</label>
                         <input type="text" class="form-control" name="username">
                     </div>
 
                     <div class="form-group">
-                        <label for="username">Password</label>
+                        <label for="username">Contraseña</label>
                         <input type="password" class="form-control" name="password">
                     </div>
 
-                    <button type="submit" class="btn btn-success">Login</button>
+                    <button type="submit" class="btn btn-success">Iniciar sesión</button>
                 </form>
             </div>
         {% endblock %}

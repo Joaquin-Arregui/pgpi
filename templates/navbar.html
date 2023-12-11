@@ -8,10 +8,12 @@
   span {
     font-size: 20px;
   }
+
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-custom">
   <a class="navbar-brand" href="{% url 'index'  %}" style="color:white">🏪 Collecta</a>
+  <a class="nav-link" href="{% url 'info' %}" style="color:white">Sobre nosotros</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -19,7 +21,7 @@
     <div class="navbar-nav mr-auto">
       <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/categories" style="color:white">
         <span class="fas fa-bars"></span>
-        Categories
+        Categorias
       </a>
       <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/order/seguimiento" style="color:white">
         <span class="fas fa-truck"></span>
@@ -35,26 +37,40 @@
     
     <div class="navbar-nav ml-auto">
       {% if user.is_staff %}
+      <a href="/users/list" class="btn btn-outline-warning btn-sm ">Usuarios</a> 
+      <a href="/order/list" class="btn btn-outline-warning btn-sm ">Pedidos</a> 
       <a href="/product/create/" class="btn btn-outline-warning btn-sm ">Crear Producto</a> 
       <a href="/categories/create/" class="btn btn-outline-warning btn-sm ">Crear Categoria</a> 
-      <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/cart" style="color:white">
-        <span class="fas fa-cart-plus"></span>
-        Cart
-      </a>
-      <a class="nav-item nav-link {% if request.path == logout %}active{% endif %}" href="/profile" style="color:white">
-          <span class="fas fa-user"></span>
-          Perfil
-      </a>
-      <a class="nav-item nav-link {% if request.path == logout %}active{% endif %}" href="/user/logout" style="color:white">
-        <span class="fas fa-sign-out-alt"></span>
-        Cerrar sesion
-      </a>
     </a>
-      {% elif user.is_authenticated %}
-        <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" href="/cart" style="color:white">
-          <span class="fas fa-cart-plus"></span>
-          Cart
-        </a>
+    {% endif %}
+        <li class="nav-item dropdown">
+          <a class="nav-item nav-link {% if request.path == cart %}active{% endif %}" role="button" id="carrito" data-toggle="dropdown" href="/cart" style="color:white">
+            <span class="fas fa-cart-plus"></span>
+            Carrito
+          </a>
+          <div class="dropdown-menu" aria-labelledby="carrito">
+            <a href="/cart" style="color:black;"><span class="fas fa-cart-plus" style="padding-left: 10px;"></span> Entrar al carrito</a><br>
+            {% for cp in cart.products_related %}
+              {% with product=cp.product %}
+              <hr>
+              <div style="text-align: center;">
+                {% if product.image %}
+                  <a href="{% url 'products:product' product.slug %}">
+                    <img src="{{ product.image.url}}" alt="Imagen del Producto" width="100" height="100">
+                  </a>
+                {% endif%}
+                <br>
+                <th>
+                    <a href="{% url 'products:product' product.slug %}">
+                        {{ product.title}}
+                    </a>
+                </th>
+              </div>
+              {% endwith %}
+            {% endfor %}
+          </div>
+        </li>
+        {% if user.is_authenticated %}
         <a class="nav-item nav-link {% if request.path == logout %}active{% endif %}" href="/profile" style="color:white">
             <span class="fas fa-user"></span>
             Perfil
@@ -64,10 +80,11 @@
           Cerrar sesion
         </a>
       </a>
+
       {% else %}
         <a class="nav-item nav-link {% if request.path == login %}active{% endif %}" href="/user/login" style="color:white">
           <span class="fas fa-user"></span>
-          Login
+          Iniciar sesión
         </a>
         <a class="nav-item nav-link {% if request.path == register %}active{% endif %}" href="/user/register" style="color:white">
             <span class="fas fa-user-plus"></span>

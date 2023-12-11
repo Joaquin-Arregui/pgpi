@@ -22,14 +22,22 @@
                       <div class="d-flex flex-column">
                            <div>
                               {% if object.stock %}
-                               <a href="{% url 'products:product' object.slug %}?quantity=1" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Añadir al carrito</a> 
+                              <div>
+                                <input type="number" value="1" max="{{ object.stock }}" min="1" class="prueba form-control col-sm-1 d-inline" id="quantity_{{object.id}}" name="quantity" style="min-width:50%;">
+                               </div>
+                               <div>
+                                   <form id="form_{{object.id}}" method="get" name="{{object.id}}">
+                                       {% csrf_token %}
+                                       <button type="submit" class="btn btn-outline-warning btn-sm "><span class="fas fa-cart-plus"></span>Añadir al carrito</button>
+                                   </form>
+                               </div>
                                {% endif %}
                               </div>
                             <div>
                               {% if user.is_staff %}
                                     <user class="is_staff">
-                                        <a href="{% url 'products:product' object.slug %}/edit" class="btn btn-outline-warning btn-sm ">Edit</a> 
-                                        <a href="{% url 'products:product' object.slug %}/delete" class="btn btn-outline-warning btn-sm ">Delete</a> 
+                                        <a href="{% url 'products:product' object.slug %}/edit" class="btn btn-outline-warning btn-sm ">Editar</a> 
+                                        <a href="{% url 'products:product' object.slug %}/delete" class="btn btn-outline-warning btn-sm ">Eliminar</a> 
                                    </user> 
                                    {% endif %}
                                    </div>
@@ -46,4 +54,65 @@
               </li>
          </ul>
     {% endfor %}
+    <div class="pagination" style="padding: 40px;" >
+          <span class="page-links">
+          {% if page_obj.has_previous %}
+               <a href="?page={{ page_obj.previous_page_number }}">Página anterior<a>
+          {% endif %}
+          <span class="page-current">
+               Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+          </span>
+          {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">Siguiente página</a>
+          {% endif %}
+     </span>
+     </div>
  </div>
+ <script>
+     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+     const forms = document.querySelectorAll('form');
+     forms.forEach(form => {
+         form.addEventListener('submit', function(e) {
+             e.preventDefault();
+             console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa')
+             const quantity = parseInt(document.getElementById(`quantity_${form.name}`).value);
+             const stock = parseInt("{{ object.stock }}");
+        if (quantity<1)  {
+         alert('La cantidad debe ser mayor que uno');
+         return;
+        } else if (quantity>stock) {
+         alert('La cantidad no debe ser mayor que el stock');
+         return;
+        }
+        const product = form.name
+        console.log(product);
+        const url = `{% url 'carts:add' %}?quantity=${quantity}&product_id=${product}`;
+     
+        var xhr = new XMLHttpRequest();
+     
+     
+        xhr.open('post', url, true);
+     
+     
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+     
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                alert("Se ha añadido al carrito correctamente");
+            } else {
+     
+                alert('Un error ha sucedido durante la transacción');
+            }
+        };
+     
+        xhr.onerror = function() {
+            console.error('Un error ha sucedido durante la transacción');
+        };
+     
+        xhr.send();
+    });
+});
+     
+     
+     </script>
