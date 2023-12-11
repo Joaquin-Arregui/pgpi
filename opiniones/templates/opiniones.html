@@ -10,7 +10,9 @@
           {% include 'comment.html' %}
         {%endif%}
         <hr>
+        {%if user.is_staff%}
         {% include 'listOpiniones.html' %}
+        {%endif%}
       </ul>
     </div>
   </div>

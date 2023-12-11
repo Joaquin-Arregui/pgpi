@@ -5,5 +5,5 @@ app_name = 'opiniones'
 
 urlpatterns = [
     path('', views.opiniones, name='opiniones'),
-    path('/delete', views.remove, name='remove'),
+    path('process', views.procesar, name='process'),
 ]

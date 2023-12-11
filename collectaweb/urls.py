@@ -33,7 +33,7 @@ urlpatterns = [
     path('cart/', include('carts.urls')),
     path('order/', include('orders.urls')),
     path('profile/', perfil ,name = "perfil"),
-    path('opiniones', include('opiniones.urls'))
+    path('opiniones/', include('opiniones.urls'))
 ]
 
 
