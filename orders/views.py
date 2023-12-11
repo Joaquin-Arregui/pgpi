@@ -12,17 +12,8 @@ from django.core.mail import send_mail
 @login_required(login_url='login')
 def order(request):
     cart = get_or_create_cart(request)
-
-    order = cart.order
-
-    if order is None and request.user.is_authenticated:
-        order = Order.objects.create(cart=cart, user=request.user)
-    if order:
-        request.session['order_id'] = order.order_id
-    print('Este es cart de order', cart)
     return render(request, 'orders/order.html', {
         'cart': cart,
-        'order': order,
         'breadcrumb': breadcrumb()
     })
 
@@ -53,7 +44,9 @@ def envio(request, slug):
     return render(request, 'orders/id_envio.html', context)
 
 def seguimiento(request):
-   return render(request, 'orders/seguimiento.html')
+    orders = Order.objects.filter(user=request.user).order_by('-id')
+    context = {'orders': orders, 'admin': False }
+    return render(request, 'orders/seguimiento.html', context)
 
 def estado(request):
     order_id = request.GET.get('slug')
@@ -74,27 +67,31 @@ def pago(request):
         envio=True
     else:
         envio=False
-    order=Order.objects.create(
-    cart=cart,
-    user=request.user if request.user.is_authenticated else None)
-    context = {'order': order,
-                'pago':pago,
+    context = {'pago':pago,
                 'envio':envio}
     if request.method == 'POST':
-
+        cart.user = None
+        cart.save()
+        request.session['cart_id'] = None
+        order=Order.objects.create(
+            cart=cart,
+            user=request.user if request.user.is_authenticated else None)
         nombre = request.POST.get('firstName')
         apellidos = request.POST.get('lastName')
+        correo = request.POST.get('email')
         calle = request.POST.get('street')
         numero = request.POST.get('number')
         codigopostal = request.POST.get('postalCode')
         ciudad = request.POST.get('city')
         tarjeta = request.POST.get('cardNumber')
         cvv = request.POST.get('cvv') 
-        fechacad = request.POST.get('expiryDate')      
+        fechacad = request.POST.get('expiryDate')
+        guardar = request.POST.get('save')
 
 
         order.nombre=nombre
         order.apellidos=apellidos
+        order.correo=correo
         order.calle = calle
         order.numero = numero
         order.codigopostal=codigopostal
@@ -103,43 +100,26 @@ def pago(request):
         order.cvv=cvv
         order.fechacad=fechacad
 
+        user = request.user if request.user.is_authenticated else None
+        if guardar and user !=None:
+            user.first_name=nombre
+            user.last_name=apellidos
+            user.email=correo
+            user.calle = calle
+            user.numero = numero
+            user.codigopostal=codigopostal
+            user.ciudad=ciudad
+            user.tarjeta=tarjeta
+            user.cvv=cvv
+            user.fechacad=fechacad
+            user.save()
+
 
         order.save()
 
 
         return redirect('/order/envio/' + order.order_id)
     return render(request, 'orders/pasarelapago.html', context)
-
-def pagocontrareembolso(request):
-    id= request.GET.get("cart")
-    cart = get_object_or_404(Cart, pk=id)
-    order=Order.objects.create(
-    cart=cart,
-    user=request.user if request.user.is_authenticated else None)
-    context = {'order': order}
-    if request.method == 'POST':
-
-        nombre = request.POST.get('firstName')
-        apellidos = request.POST.get('lastName')
-        calle = request.POST.get('street')
-        numero = request.POST.get('number')
-        codigopostal = request.POST.get('postalCode')
-        ciudad = request.POST.get('city')    
-
-
-        order.nombre=nombre
-        order.apellidos=apellidos
-        order.calle = calle
-        order.numero = numero
-        order.codigopostal=codigopostal
-        order.ciudad=ciudad
-
-
-        order.save()
-
-
-        return redirect('/order/envio/' + order.order_id)
-    return render(request, 'orders/pagocontrareembolso.html', context)
 
 
 def SeguimientoDeleteView(request):
@@ -153,8 +133,7 @@ def SeguimientoDeleteView(request):
 def SeguimientoListView(request):
     orders = Order.objects.all().order_by('-id')
     context = {
-        'message': 'Listado de Productos',
-        'orders': orders,
+        'orders': orders, 'admin': True
     }
     return render(request, 'orders/listOrders.html', context)
     #orders = Order.objects.all().order_by('-id')

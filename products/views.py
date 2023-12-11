@@ -82,11 +82,16 @@ def ProductEditView(request, slug):
         # add other fields as necessary
 
         # update the product
-        product.title = titulo
-        product.description = descripcion
-        product.price = precio
-        product.stock = stock
-        product.image = imagen
+        if titulo != None and titulo != '':
+            product.title = titulo
+        if descripcion != None and descripcion != '':
+            product.description = descripcion
+        if precio != None and precio != '':
+            product.price = precio
+        if stock != None and stock != '':
+            product.stock = stock
+        if imagen != None and imagen != '':
+            product.image = imagen
         # update other fields as necessary
 
         # save the product
