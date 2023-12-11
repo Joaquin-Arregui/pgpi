@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from carts.utils import get_or_create_cart
 from django.views.generic.list import ListView
 
 from users.models import Admin
@@ -13,16 +14,15 @@ from django.contrib.auth.decorators import user_passes_test
 class ProductListView(ListView):
     paginate_by=5
     template_name = 'index.html'
-    #consulta
     queryset = Product.objects.all().order_by('-id')
 
-    #pasar el contexto de la clase al template
     def get_context_data(self, **kwargs):
         producers = Producer.objects.all()
         context = super().get_context_data(**kwargs)
+        cart = get_or_create_cart(self.request)
         context['producers'] = producers
+        context['cart'] = cart
         context['message'] = 'Listado de Productos'
-        print(context)
         context['products'] = context['object_list'] 
         return context
 
@@ -33,7 +33,6 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #print(context)
         return context
 
 @login_required
@@ -117,7 +116,6 @@ class ProductSearchListView(ListView):
         context = super().get_context_data(**kwargs)
         context['query'] = self.query()
         context['count'] = context['object_list'].count()
-        print('Este es query', context['query'])
         return context
     
 class ProductFilterListView(ListView):

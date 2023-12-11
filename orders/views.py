@@ -12,6 +12,11 @@ from django.core.mail import send_mail
 @login_required(login_url='login')
 def order(request):
     cart = get_or_create_cart(request)
+    order = cart.order
+    if order is None and request.user.is_authenticated:
+        order = Order.objects.create(cart=cart, user=request.user)
+    if order:
+        request.session['order_id'] = order.order_id
     return render(request, 'orders/order.html', {
         'cart': cart,
         'breadcrumb': breadcrumb()

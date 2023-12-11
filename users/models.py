@@ -17,7 +17,6 @@ class User(AbstractUser):
         return '{} {}'.format(self.first_name, self.last_name)
 
 class Admin(User):
-
     @staticmethod
     def get_user_permissions(user):
         return user.is_staff and user.is_authenticated

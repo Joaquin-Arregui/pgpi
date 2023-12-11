@@ -49,10 +49,10 @@ document.getElementById('form').addEventListener('submit', function(e) {
    const quantity = parseInt(document.getElementById('quantity').value);
    const stock = parseInt("{{ product.stock }}");
    if (quantity<1)  {
-    alert('The quantity cannot be less than 1');
+    alert('La cantidad no puede ser menor que 1');
     return;
    } else if (quantity>stock) {
-    alert('The quantity cannot be bigger than the stock');
+    alert('la cantidad no puede ser maoyr que el stock');
     return;
    }
    const product = "{{ product.id }}";
