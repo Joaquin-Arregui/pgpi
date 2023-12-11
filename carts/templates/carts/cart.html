@@ -59,13 +59,24 @@
   <div class="card mt-4">
     <div class="card-body">
     <div class="font-weight-bold">
-        Subtotal: ({{ cart.products.count}}) <span class="text-danger">{{ cart.subtotal | price_format }}</span>
+        Subtotal: ({{ cart.products.count}}) <span class="text-danger">{{ cart.subtotal | price_format }}</span><br>
+        Gastos de Envio: <span class="text-danger">${{ cart.shipping_cost }}</span><br>
+        Total: <span class="text-danger">{{ cart.total | price_format }}</span>
     </div>
+    <br>
+    <select id="pago" class="form-control" style="min-width:60px;">
+        <option value="tarjeta">Pago con tarjeta</option>
+        <option value="contrareembolso">Pago contrareembolso</option>
+
+    </select>
+    <br>
+    <select id="envio" class="form-control" style="min-width:60px;">
+        <option value="casa">Envío a domicilio</option>
+        <option value="tienda">Recoger en tienda</option>
+        <option value="ecológico">Envío ecológico</option>
+    </select>
     <div class="mt-2">
-        <a href="{% url 'orders:pago' %}?cart={{cart.id}}" class="btn btn-success">💳 Proceder al pago</a>
-    </div>
-    <div class="mt-2">
-        <a href="{% url 'orders:pagocontrareembolso' %}?cart={{cart.id}}" class="btn btn-success">💳 Pagar contrareembolso</a>
+        <a id="boton" href="{% url 'orders:pago' %}?cart={{cart.id}}&pago=tarjeta&envio=casa" class="btn btn-success">💳 Proceder al pago</a>
     </div>
     </div>
    </div>
@@ -80,4 +91,34 @@
     </div>
 </div>
 {% endif %}
+
+<script>
+
+    var pagoSelect = document.getElementById('pago');
+    var envioSelect = document.getElementById('envio');
+    window.onload= function(){
+        pagoSelect.value="tarjeta";
+        envioSelect.value="casa";
+    };
+
+    pagoSelect.addEventListener('change', function() {
+        console.log("Evento de cambio de 'pago' disparado");
+        var pago = this.value;
+        var envio = envioSelect.value;
+        console.log("Pago: " + pago);
+        console.log("Envio: " + envio);
+        var newHref = "{% url 'orders:pago' %}?cart={{cart.id}}&pago=" + this.value + "&envio=" + envio;
+        document.getElementById('boton').href = newHref;
+    });
+
+    envioSelect.addEventListener('change', function() {
+        console.log("Evento de cambio de 'envio' disparado");
+        var envio = this.value;
+        var pago = pagoSelect.value;
+        console.log("Pago: " + pago);
+        console.log("Envio: " + envio);
+        var newHref = "{% url 'orders:pago' %}?cart={{cart.id}}&pago=" + pago + "&envio=" + envio;
+        document.getElementById('boton').href = newHref;
+    });
+</script>
 {% endblock  %}

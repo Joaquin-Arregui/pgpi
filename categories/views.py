@@ -20,7 +20,7 @@ def category(request, slug):
         'object_list':products,
         'category': category.title
     })
-    
+
 @login_required
 @user_passes_test(Admin.get_user_permissions)
 def CategoryDeleteView(request, slug):

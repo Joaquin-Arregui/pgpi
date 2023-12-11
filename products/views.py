@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from carts.utils import get_or_create_cart
 from django.views.generic.list import ListView
+
+from users.models import Admin
 from .models import Product, Producer
 from django.views.generic.detail import DetailView
 #la clase q permite una consulta con diferentes filtros
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+
 
 class ProductListView(ListView):
     paginate_by=5
@@ -30,6 +35,8 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def ProductDeleteView(request, slug):
     producto = Product.objects.filter(slug=slug).first()
 
@@ -37,6 +44,8 @@ def ProductDeleteView(request, slug):
 
     return redirect('/')
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def ProductCreateView(request):
     if request.method == 'POST':
         # get data from the form
@@ -57,6 +66,8 @@ def ProductCreateView(request):
 
     return render(request, 'productCreate.html')
 
+@login_required
+@user_passes_test(Admin.get_user_permissions)
 def ProductEditView(request, slug):
     product = Product.objects.filter(slug=slug).first()
 
@@ -70,11 +81,16 @@ def ProductEditView(request, slug):
         # add other fields as necessary
 
         # update the product
-        product.title = titulo
-        product.description = descripcion
-        product.price = precio
-        product.stock = stock
-        product.image = imagen
+        if titulo != None and titulo != '':
+            product.title = titulo
+        if descripcion != None and descripcion != '':
+            product.description = descripcion
+        if precio != None and precio != '':
+            product.price = precio
+        if stock != None and stock != '':
+            product.stock = stock
+        if imagen != None and imagen != '':
+            product.image = imagen
         # update other fields as necessary
 
         # save the product

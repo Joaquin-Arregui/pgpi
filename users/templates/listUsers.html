@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+<style>
+
+</style>
+  <div class="col-10">
+    <h3 style="text-align: center;">Lista de Usuarios</h3>
+    <ul class="list-group">
+      <br>
+      {% include 'searchBar.html' %}
+      <hr>
+      {% include 'users.html' %}
+    </ul>
+  </div>
+{% endblock %}
+{% load static %}

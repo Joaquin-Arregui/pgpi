@@ -12,7 +12,9 @@ class Order(models.Model):
     order_id = models.CharField(max_length=100, null=False, blank=False, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    correo = models.EmailField(blank=True)
     shipping_total = models.DecimalField(default=5, max_digits=8, decimal_places=2)
+    subtotal = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     total = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     enviado= models.DateField(null=True, blank=True)
@@ -33,23 +35,21 @@ class Order(models.Model):
         return self.order_id
 
     def get_total(self):
-        return self.cart.total + self.shipping_total
+        return self.cart.total
 
     def update_total(self):
         self.total = self.get_total()
         self.save()
 
     def estado(self):
-        if self.tarjeta==None:
-            res= "No se ha realizado el pago"
-        else:
-            res= "En proceso"
 
-            if self.enviado != None:
-                if self.entregado !=None:
-                    res= "Entregado"
-                else:
-                    res= "Enviado"
+        res= "En proceso"
+
+        if self.enviado != None:
+            if self.entregado !=None:
+                res= "Entregado"
+            else:
+                res= "Enviado"
         return res
         
 
