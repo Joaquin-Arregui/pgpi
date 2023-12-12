@@ -4,7 +4,7 @@ from users.models import Admin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils import timezone
 
-# Create your views here.
+
 
 @login_required(login_url='login')
 def opiniones(request): 

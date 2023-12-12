@@ -77,7 +77,6 @@
 
 
      }
-     console.log(forms)
      forms.forEach(form => {
          form.addEventListener('submit', function(e) {
              e.preventDefault();
@@ -92,7 +91,7 @@
         }
         const product = form.name
         const url = `{% url 'carts:add' %}?quantity=${quantity}&product_id=${product}`;
-        console.log('aaa')
+
         var xhr = new XMLHttpRequest();
      
      

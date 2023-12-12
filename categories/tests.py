@@ -15,8 +15,6 @@ class CategoryModelTest(TestCase):
             image='flash.png')
 
     def test_create_category(self):
-        #test crear una categoria
-
         category = Category.objects.create(
             title="Categoria de prueba",
             description="Descripcion de prueba",
@@ -49,7 +47,7 @@ class CategoryViewTest(TestCase):
             title="Categoria de prueba",
             description="Descripcion de prueba",
             image = ''
-            #image = File(open('media/categories/mario_sellado.png', 'rb'))
+
         )
         self.staff_user = User.objects.create_user(username='staff', password='test123', is_staff=True)
 

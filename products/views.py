@@ -5,7 +5,6 @@ from django.views.generic.list import ListView
 from users.models import Admin
 from .models import Product, Producer
 from django.views.generic.detail import DetailView
-#la clase q permite una consulta con diferentes filtros
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -66,20 +65,20 @@ def ProductDeleteView(request, slug):
 def ProductCreateView(request):
     cart = get_or_create_cart(request)
     if request.method == 'POST':
-        # get data from the form
+        
         titulo = request.POST.get('titulo')
         descripcion = request.POST.get('descripcion')
         precio = request.POST.get('precio')
         stock = request.POST.get('stock')
-        imagen = request.FILES.get('imagen')  # get the image as an uploaded file
+        imagen = request.FILES.get('imagen')  
 
-        # create a new product
+       
         product = Product(title=titulo, description=descripcion, price=precio, stock=stock, image=imagen)
 
-        # save the product
+       
         product.save()
 
-        # redirect to the product page after saving
+
         return redirect('/product/' + product.slug)
 
     return render(request, 'productCreate.html', {
@@ -93,15 +92,14 @@ def ProductEditView(request, slug):
     cart = get_or_create_cart(request)
 
     if request.method == 'POST':
-        # get data from the form
+     
         titulo = request.POST.get('titulo')
         descripcion = request.POST.get('descripcion')
         precio = request.POST.get('precio')
         stock = request.POST.get('stock')
         imagen = request.FILES.get('imagen')
-        # add other fields as necessary
+     
 
-        # update the product
         if titulo != None and titulo != '':
             product.title = titulo
         if descripcion != None and descripcion != '':
@@ -112,12 +110,12 @@ def ProductEditView(request, slug):
             product.stock = stock
         if imagen != None and imagen != '':
             product.image = imagen
-        # update other fields as necessary
 
-        # save the product
+
+
         product.save()
 
-        # redirect to the same page after saving
+
         return redirect('/product/' + slug)
 
     return render(request, 'productEdit.html', {

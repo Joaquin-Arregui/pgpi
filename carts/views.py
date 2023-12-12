@@ -8,13 +8,13 @@ from django.shortcuts import HttpResponse
 
 
 
-# Create your views here.
+
 
 def cart(request):
     cart = get_or_create_cart(request)
 
     return render(request, 'carts/cart.html', {
-        #mandando el objeto cart al template
+
         'cart':cart
     })
 
@@ -28,7 +28,7 @@ def add(request):
         return
     elif quantity > product.stock:
         return
-    # si esa llave no existe, el valor de la llave será uno por default de productos
+
     new_stock = product.stock-quantity
     product.stock = new_stock
     product.save()
@@ -47,10 +47,10 @@ def remove(request):
             cart_product = CartProducts.objects.get(cart=cart, product__id=product_id)
             quantity = cart_product.quantity
             
-            # Elimina el producto del carrito
+  
             cart.products.remove(cart_product.product)
             
-            # Aumenta el stock del producto eliminado
+
             product = cart_product.product
             product.stock += quantity
             product.save()
@@ -72,21 +72,21 @@ def update_cart(request):
             cart_product = CartProducts.objects.get(cart=cart, product=product)
             current_quantity = cart_product.quantity
 
-            # Verifica si la cantidad es diferente antes de actualizar
+            
             if new_quantity != current_quantity and 1 <= new_quantity <= product.stock:
-                # Actualiza la cantidad del producto en el carrito
+
                 cart_product.update_quantity(new_quantity)
 
-                # Actualiza el stock del producto
+ 
                 updated_stock = product.stock + current_quantity - new_quantity
                 product.stock = updated_stock
                 product.save()
         except CartProducts.DoesNotExist:
-            # Manejar el caso en que el producto no esté en el carrito
+
             pass
 
-        # Redirige a la página del carrito
+   
         return redirect('carts:cart')
     else:
-        # Manejar el caso en que la solicitud no sea POST
+
         pass

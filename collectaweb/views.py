@@ -29,8 +29,7 @@ def info(request):
     cart = get_or_create_cart(request)
     return render(request, 'info.html', {
         'cart': cart
-        #'title': 'Información de la Empresa',
-        #'informacion': 'Esta es la información sobre nuestra empresa.',
+
     })
 
 def logout_view(request):

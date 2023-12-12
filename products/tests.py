@@ -6,7 +6,7 @@ from users.models import User
 from django.urls import reverse
 
 
-# Pruebas para el modelo Product
+
 class ProductModelTest(TestCase):
     def setUp(self):
         """
@@ -57,7 +57,7 @@ class ProductEditViewTest(TestCase):
         Prueba que se edita correctamente un producto a través de la vista.
         """
         response = self.client.post(f'/product/{self.product.slug}/edit', self.product_data)
-        self.assertEqual(response.status_code, 302)  # Redirección después de la edición
+        self.assertEqual(response.status_code, 302) 
         self.product.refresh_from_db()
         self.assertEqual(self.product.title, 'Updated Product')
         self.assertEqual(self.product.description, 'Updated description')
@@ -84,7 +84,7 @@ class ProductDeleteViewTest(TestCase):
         """
         self.client.force_login(self.staff_user)
         response = self.client.post(reverse('products:product_delete', kwargs={'slug': self.product.slug}))
-        self.assertEqual(response.status_code, 302)  # Redirección después de la eliminación
+        self.assertEqual(response.status_code, 302) 
         self.assertEqual(Product.objects.count(), 0)
 
     def test_product_delete_non_staff(self):
@@ -93,7 +93,7 @@ class ProductDeleteViewTest(TestCase):
         """
         self.client.force_login(self.non_staff_user)
         response = self.client.post(reverse('products:product_delete', kwargs={'slug': self.product.slug}))
-        self.assertEqual(Product.objects.count(), 1)  # El producto todavía debería existir
+        self.assertEqual(Product.objects.count(), 1)  
 
 class ProductEditViewTest(TestCase):
     def setUp(self):
@@ -121,6 +121,6 @@ class ProductEditViewTest(TestCase):
         """
         self.client.force_login(self.staff_user)
         response = self.client.post(reverse('products:product_edit', kwargs={'slug': self.product.slug}), self.product_data)
-        self.assertEqual(response.status_code, 302)  # Redirección después de la edición
+        self.assertEqual(response.status_code, 302)  
         self.product.refresh_from_db()
         self.assertEqual

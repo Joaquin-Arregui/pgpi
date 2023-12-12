@@ -1,7 +1,7 @@
 from .models import Cart
 
 def get_or_create_cart(request):
-    #pasar todo esto a una funcion
+
     user = request.user if request.user.is_authenticated else None
     if user == None:
         cart_id = request.session.get('cart_id')
