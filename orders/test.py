@@ -61,6 +61,3 @@ class OrderViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'orders/id_envio.html')
         self.assertEqual(response.context['order'], self.order)
-
-
-    # Añade más pruebas para las demás vistas aquí
