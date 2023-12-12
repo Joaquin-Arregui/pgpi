@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-from products.views import ProductListView
+from products.views import ProductListView,EscaparateView
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import include
@@ -24,7 +24,7 @@ from users.views import *
 from .views import info
 
 urlpatterns = [
-    path('', ProductListView.as_view(), name="index"),
+    path('', EscaparateView.as_view(), name="index"),
     path('user/login/', views.login_view, name="login"),
     path('user/logout/', views.logout_view, name="logout"),
     path('user/register/', views.register, name="register"),

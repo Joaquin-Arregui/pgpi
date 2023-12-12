@@ -53,9 +53,7 @@ def seguimiento(request):
     if user != None:
         orders = Order.objects.filter(user=request.user).order_by('-id')
     else:
-        orders = None
-    for order in orders:
-        print(order)
+        orders = []
     return render(request, 'orders/seguimiento.html', {
         'object_list': orders, 
         'admin': False, 

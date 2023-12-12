@@ -25,6 +25,21 @@ class ProductListView(ListView):
         context['message'] = 'Listado de Productos'
         context['products'] = context['object_list'] 
         return context
+    
+class EscaparateView(ListView):
+    paginate_by=5
+    template_name = 'escaparate.html'
+    queryset = Product.objects.exclude(stock=0).order_by('stock')[:3]
+
+    def get_context_data(self, **kwargs):
+        producers = Producer.objects.all()
+        context = super().get_context_data(**kwargs)
+        cart = get_or_create_cart(self.request)
+        context['producers'] = producers
+        context['cart'] = cart
+        context['message'] = 'Listado de Productos'
+        context['products'] = context['object_list'] 
+        return context
 
 class ProductDetailView(DetailView):
     model = Product

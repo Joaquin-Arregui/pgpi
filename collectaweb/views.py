@@ -59,7 +59,6 @@ def register(request):
 
         if user:
             login(request, user)
-            messages.success(request, 'Usuario creado exitosamente')
             return redirect('index')
 
     return render(request, 'users/register.html', {
@@ -74,8 +73,9 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username') 
         password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password)
+        user = authenticate(username=username,password=password)
+        if not user:
+            user = User.objects.filter(username=username, password=password).first()
         if not user:
             user=User.objects.filter(email=username,password=password).first()
         if user:

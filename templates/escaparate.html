@@ -1,0 +1,31 @@
+{% extends 'base.html'%}
+{% load product_extras %}
+{% block content %}
+  <div class="row">
+    <div class="col-10" >
+      <br>
+      <h2 style="text-align:center">BIENVENIDO A COLLECTA</h2>
+      <br>
+      <div style="text-align:center">
+        <div> {% include 'searchBar.html' %}</div>
+        <br>
+        <a href="{% url 'products:products'%}" class="btn btn-outline-success btn-sm" >Ir al catálogo</a> 
+        <hr>
+        <h4 style="color:blue">¡¡ÚLTIMOS PRODUCTOS EN STOCK!! CORRE QUE SE ACABAN</h4>
+      </div>
+      <ul class="list-group">
+        <br>
+        {% include 'list.html' %}
+      </ul>
+    </div>
+    {%include 'filter.html' %}
+  </div>
+{% endblock %}
+{% load static %}
+
+<style>
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+ </style>

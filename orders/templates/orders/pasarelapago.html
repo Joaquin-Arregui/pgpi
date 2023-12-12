@@ -53,10 +53,12 @@
         pattern="(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})" required>
     </div>
     {%endif%}
+    {%if user.is_authenticated%}
     <div class="form-group">
       <a>Guardar los datos:
       <input type="checkbox" id="save" name="save" class="form-control"></a>
     </div>
+    {%endif%}
     <div class="input-group-append">
       <button type="submit" id="confirmPayment" class="btn btn-warning" href="/envio/{{order.order_id}}">Confirmar
         pago</button>
@@ -77,33 +79,50 @@
   window.onload = function(){
 
       var nombre = "{{ user.first_name }}"; 
+      if(nombre!="None"){
       document.getElementById('firstName').value = nombre;
+      }
 
       var apellidos = "{{ user.last_name }}";
+      if(apellidos!="None"){
       document.getElementById('lastName').value = apellidos;
+      }
 
       var correo = "{{ user.email }}";
+      if(correo!="None"){
       document.getElementById('email').value = correo;
-
+      }
       var calle = "{{ user.calle }}";
+      if(calle!="None"){
       document.getElementById('street').value = calle;
+      }
 
       var numero = "{{ user.numero }}";
+      if(numero!="None"){
       document.getElementById('number').value = numero;
+      }
 
       var codigopostal = "{{ user.codigopostal }}";
+      if(codigopostal!="None"){
       document.getElementById('postalCode').value = codigopostal;
+      }
 
       var ciudad = "{{ user.ciudad }}";
+      if(ciudad!="None"){
       document.getElementById('city').value = ciudad;
+      }
 
       var tarjeta = "{{ user.tarjeta }}";
+      if(tarjeta!="None"){
       document.getElementById('cardNumber').value = tarjeta;
+      }
 
       var cvv = "{{ user.cvv }}";
+      if(cvv!="None"){
       document.getElementById('cvv').value = cvv;
-
+      }
       var fechacad = "{{ user.fechacad }}";
+      if(fechacad!="None")
       document.getElementById('expiryDate').value = fechacad;
   };
 </script>
